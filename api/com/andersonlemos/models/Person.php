@@ -3,12 +3,12 @@ namespace com\andersonlemos\models;
 
 require_once __DIR__."/Bean.php";
 
-class Person extends Bean {
+abstract class Person extends Bean {
 
-    private $name;
-    private $dateOfBirth;
-    private $phone;
-    private $address;
+    protected $name;
+    protected $dateOfBirth;
+    protected $phone;
+    protected $address;
 
     /* constructor (by default, if a argument is not passed, it will be NULL). */
     public function __construct($id = NULL, $name = NULL, $dateOfBirth = NULL, $phone = NULL, $address = NULL) {
@@ -77,7 +77,7 @@ class Person extends Bean {
      * The attribute address can keep the id itself (because of the lazy initialization) or the object address
      * */
     public function getAddressId() {
-        return (is_null($this->address) || is_int($this->address)) ? $this->address : $this->address->getId();
+        return is_object($this->address) ? $this->address->getId() : $this->address;
     }
 }
 
