@@ -1,6 +1,8 @@
 <?php
 namespace com\andersonlemos\models;
 
+require_once __DIR__."/Bean.php";
+
 class Address extends Bean {
 
     private $street;
