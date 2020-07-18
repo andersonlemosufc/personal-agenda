@@ -8,7 +8,8 @@ class Owner extends Person {
     private $appointments;
 
     /* constructor (by default, if a argument is not passed, it will be NULL,
-     * except contacts and appointments arrays, initialized with empty arrays). */
+     * except contacts and appointments arrays, initialized with empty arrays).
+     * */
     public function __construct($id = NULL, $name = NULL, $dateOfBirth = NULL, $phone = NULL, $email = NULL, $photo = NULL, $address = NULL,
             $password = NULL, $contacts = [], $appointments = []) {
         parent::__construct($id, $name, $dateOfBirth, $phone, $email, $photo, $address);

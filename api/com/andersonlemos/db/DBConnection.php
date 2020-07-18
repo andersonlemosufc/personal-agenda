@@ -19,6 +19,9 @@ class DBConnection {
     /* destructor: closes the connection link with the database */
     public function __destruct() {
         mysqli_close($this->connection);
+
+        // TODO: remove this line
+        echo("closing connection");
     }
 
     /* Returns the connection link with the database */

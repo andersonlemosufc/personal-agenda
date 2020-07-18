@@ -18,7 +18,8 @@ class Appointment extends Bean {
     private $contacts;
 
     /* constructor (by default, if a argument is not passed, it will be NULL,
-     * except the contacts array, initialized with an empty array and repeat, initialized with NO_REPEAT constant). */
+     * except the contacts array, initialized with an empty array and repeat, initialized with NO_REPEAT constant).
+     * */
     public function __construct($id = NULL, $date = NULL, $startTime = NULL, $endTime = NULL, $description = NULL,
             $repeat = AppointmentRepeat::NO_REPEAT, $address = NULL, $owner = NULL, $contacts = []) {
         parent::__construct($id);
