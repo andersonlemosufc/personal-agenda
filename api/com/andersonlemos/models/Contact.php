@@ -7,18 +7,16 @@ class Contact extends Person {
 
     private $comments;
     private $favorite;
-    private $photo;
     private $owner;
     private $appointments;
 
     /* constructor (by default, if a argument is not passed, it will be NULL,
      * except the appointments array, initialized with an empty array). */
-    public function __construct($id = NULL, $name = NULL, $dateOfBirth = NULL, $phone = NULL, $address = NULL,
-            $comments = NULL, $favorite = NULL, $photo = NULL, $owner = NULL, $appointments = []) {
-        parent::__construct($id, $name, $dateOfBirth, $phone, $address);
+    public function __construct($id = NULL, $name = NULL, $dateOfBirth = NULL, $phone = NULL, $email = NULL, $photo = NULL, $address = NULL,
+            $comments = NULL, $favorite = NULL, $owner = NULL, $appointments = []) {
+        parent::__construct($id, $name, $dateOfBirth, $phone, $email, $photo, $address);
         $this->comments = $comments;
         $this->favorite = $favorite;
-        $this->photo = $photo;
         $this->owner = $owner;
         $this->appointments = $appointments;
     }
@@ -31,10 +29,6 @@ class Contact extends Person {
 
     public function isFavorite() {
         return $this->favorite;
-    }
-
-    public function getPhoto() {
-        return $this->photo;
     }
 
     public function getOwner() {
@@ -57,10 +51,6 @@ class Contact extends Person {
 
     public function setFavorite($favorite) {
         $this->favorite = $favorite;
-    }
-
-    public function setPhoto($photo) {
-        $this->photo = $photo;
     }
 
     public function setOwner($owner) {

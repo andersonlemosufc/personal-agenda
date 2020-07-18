@@ -8,14 +8,18 @@ abstract class Person extends Bean {
     protected $name;
     protected $dateOfBirth;
     protected $phone;
+    protected $email;
+    protected $photo;
     protected $address;
 
     /* constructor (by default, if a argument is not passed, it will be NULL). */
-    public function __construct($id = NULL, $name = NULL, $dateOfBirth = NULL, $phone = NULL, $address = NULL) {
+    public function __construct($id = NULL, $name = NULL, $dateOfBirth = NULL, $phone = NULL, $email = NULL, $photo = NULL, $address = NULL) {
         parent::__construct($id);
         $this->name = $name;
         $this->dateOfBirth = $dateOfBirth;
         $this->phone = $phone;
+        $this->email = $email;
+        $this->photo = $photo;
         $this->address = $address;
     }
 
@@ -31,6 +35,14 @@ abstract class Person extends Bean {
 
     public function getPhone() {
         return $this->phone;
+    }
+
+    public function getEmail() {
+        return $this->email;
+    }
+
+    public function getPhoto() {
+        return $this->photo;
     }
 
     public function getAddress() {
@@ -54,6 +66,14 @@ abstract class Person extends Bean {
         $this->phone = $phone;
     }
 
+    public function setEmail($email) {
+        $this->email = $email;
+    }
+
+    public function setPhoto($photo) {
+        $this->photo = $photo;
+    }
+
     public function setAddress($address) {
         $this->address = $address;
     }
@@ -67,6 +87,7 @@ abstract class Person extends Bean {
             "name=".$this->name.", ".
             "date of birth=".$this->dateOfBirth.", ".
             "phone=".$this->phone.", ".
+            "email=".$this->email.", ".
             "address=".$this->address.
         "]";
     }
