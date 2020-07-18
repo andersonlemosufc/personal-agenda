@@ -12,7 +12,7 @@ class Contact extends Person {
     private $appointments;
 
     /* constructor (by default, if a argument is not passed, it will be NULL,
-     * except the appointments array, inialized with an empty array). */
+     * except the appointments array, initialized with an empty array). */
     public function __construct($id = NULL, $name = NULL, $dateOfBirth = NULL, $phone = NULL, $address = NULL,
             $comments = NULL, $favorite = NULL, $photo = NULL, $owner = NULL, $appointments = []) {
         parent::__construct($id, $name, $dateOfBirth, $phone, $address);
