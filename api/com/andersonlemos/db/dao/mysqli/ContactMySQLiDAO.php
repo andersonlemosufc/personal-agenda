@@ -13,15 +13,12 @@ use com\andersonlemos\models\Contact;
 
 class ContactMySQLiDAO extends GenericMysqliDAO implements ContactDAO {
 
-    private $appointmentDAO;
-
     /* construtor: calls the parent constructor passing the table name that this classe handle (contact)
      * and the connection with the database.
      * If the database connection is NULL, the parent class will creates one that is not.
      * */
     public function __construct($connection = NULL) {
         parent::__construct("contact", $connection);
-        $this->appointmentDAO = new AppointmentMySQLiDAO($this->connection);
     }
 
     /* Returns the sql string for insert and update operations on contact table. */
@@ -54,7 +51,8 @@ class ContactMySQLiDAO extends GenericMysqliDAO implements ContactDAO {
     }
 
     public function findAppointments($contactId) {
-        return $this->appointmentDAO->findByContactId($contactId);
+        $appointmentDAO = new AppointmentMySQLiDAO($this->connection);
+        return $appointmentDAO->findByContactId($contactId);
     }
 
     /* end of ContactDAO specific functions */
