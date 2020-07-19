@@ -1,10 +1,16 @@
 <?php
 namespace com\andersonlemos\models;
 
+require_once __DIR__."/../db/dao/mysqli/AppointmentMySQLiDAO.php";
+require_once __DIR__."/../db/dao/mysqli/OwnerMySQLiDAO.php";
+require_once __DIR__."/../db/dao/mysqli/AddressMySQLiDAO.php";
 require_once __DIR__."/../enums/AppointmentRepeat.php";
 require_once __DIR__."/Bean.php";
 
 use com\andersonlemos\enums\AppointmentRepeat;
+use com\andersonlemos\db\dao\mysqli\AppointmentMySQLiDAO;
+use com\andersonlemos\db\dao\mysqli\OwnerMySQLiDAO;
+use com\andersonlemos\db\dao\mysqli\AddressMySQLiDAO;
 
 class Appointment extends Bean {
 
@@ -56,17 +62,42 @@ class Appointment extends Bean {
     }
 
     public function getAddress() {
-        // TODO: lazy initialization
+        /* The address attribute can keep the address object itself or just the id of the address object.
+         * It happens when the appointment is retrieved from the database, the intern objects are
+         * not loaded. They will be loaded only if necessary (lazy initialization).
+         * So, if we have only the address id, we will find the address object in the database.
+         * */
+        if (is_integer($this->address)) {
+            $addressDAO = new AddressMySQLiDAO();
+            $this->address = $addressDAO->findById($this->address);
+        }
         return $this->address;
     }
 
     public function getOwner() {
-        // TODO: lazy initialization
+        /* The owner attribute can keep the owner object itself or just the id of the owner object.
+         * It happens when the appointment is retrieved from the database, the intern objects are
+         * not loaded. They will be loaded only if necessary (lazy initialization).
+         * So, if we have only the owner id, we will find the owner object in the database.
+         * */
+        if (is_integer($this->owner)) {
+            $ownerDAO = new OwnerMySQLiDAO();
+            $this->owner = $ownerDAO->findById($this->owner);
+        }
         return $this->owner;
     }
 
     public function getContacts() {
-        // TODO: lazy initialization
+        /* The contacts attribute can keep the list of contacts objects itself or NULL. If it is NULL don't mean
+         * the list is empty (in this case, it will be an empty list, []). The NULL value means the list was not
+         * loaded from the database yet. It happens when the appointment is retrieved from the database, the intern objects are
+         * not loaded. They will be loaded only if necessary (lazy initialization).
+         * So, if the contacts attribute is NULL, we will find the contacts objects in the database.
+         * */
+        if (is_null($this->contacts)) {
+            $appointmentDAO = new AppointmentMySQLiDAO();
+            $this->contacts = $appointmentDAO->findContacts($this->id);
+        }
         return $this->contacts;
     }
 

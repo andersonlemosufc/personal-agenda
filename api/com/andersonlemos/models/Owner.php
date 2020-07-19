@@ -1,6 +1,11 @@
 <?php
 namespace com\andersonlemos\models;
 
+require_once __DIR__."/../db/dao/mysqli/OwnerMySQLiDAO.php";
+require_once __DIR__."/Person.php";
+
+use com\andersonlemos\db\dao\mysqli\OwnerMySQLiDAO;
+
 class Owner extends Person {
 
     private $password;
@@ -25,12 +30,30 @@ class Owner extends Person {
     }
 
     public function getContacts() {
-        // TODO: lazy initialization
+        /* The contacts attribute can keep the list of contacts objects itself or NULL. If it is NULL don't mean
+         * the list is empty (in this case, it will be an empty list, []). The NULL value means the list was not
+         * loaded from the database yet. It happens when the owner is retrieved from the database, the intern objects are
+         * not loaded. They will be loaded only if necessary (lazy initialization).
+         * So, if the contacts attribute is NULL, we will find the contacts objects in the database.
+         * */
+        if (is_null($this->contacts)) {
+            $ownerDAO = new OwnerMySQLiDAO();
+            $this->contacts = $ownerDAO->findContacts($this->id);
+        }
         return $this->contacts;
     }
 
     public function getAppointments() {
-        // TODO: lazy initialization
+        /* The appointments attribute can keep the list of appointments objects itself or NULL. If it is NULL don't mean
+         * the list is empty (in this case, it will be an empty list, []). The NULL value means the list was not
+         * loaded from the database yet. It happens when the owner is retrieved from the database, the intern objects are
+         * not loaded. They will be loaded only if necessary (lazy initialization).
+         * So, if the appointments attribute is NULL, we will find the appointments objects in the database.
+         * */
+        if (is_null($this->appointments)) {
+            $ownerDAO = new OwnerMySQLiDAO();
+            $this->appointments = $ownerDAO->findAppointments($this->id);
+        }
         return $this->appointments;
     }
 

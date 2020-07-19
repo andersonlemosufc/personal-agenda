@@ -50,9 +50,9 @@ abstract class Person extends Bean {
 
     public function getAddress() {
         /* The address attribute can keep the address object itself or just the id of the address object.
-         * It happens when the person (owner or contact) is taken from the database, the intern objects are
+         * It happens when the person (owner or contact) is retrieved from the database, the intern objects are
          * not loaded. They will be loaded only if necessary (lazy initialization).
-         * So, if we have only the address id, we find the address object in the database.
+         * So, if we have only the address id, we will find the address object in the database.
          * */
         if (is_integer($this->address)) {
             $addressDAO = new AddressMySQLiDAO();
