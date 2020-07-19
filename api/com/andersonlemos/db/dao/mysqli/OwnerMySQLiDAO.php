@@ -69,11 +69,25 @@ class OwnerMySQLiDAO extends GenericMysqliDAO implements OwnerDAO {
         $stmt->bind_result($id, $name, $dateOfBirth, $phone, $email, $photo, $addressId, $password);
 
         if ($stmt->fetch()) {
-            $owner = new Owner($id, $name, $dateOfBirth, $phone, $email, $photo, $addressId, $password);
+            $owner = new Owner($id, $name, $dateOfBirth, $phone, $email, $photo, $addressId, $password, NULL, NULL);
         }
 
         return $owner;
     }
+
+    /* OwnerDAO specific functions */
+
+    public function findContacts($ownerId) {
+        // TODO
+        return [];
+    }
+
+    public function findAppointments($ownerId) {
+        // TODO
+        return [];
+    }
+
+    /* end of OwnerDAO specific functions */
 
 }
 

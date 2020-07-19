@@ -1,10 +1,14 @@
 <?php
 namespace com\andersonlemos\db\dao\mysqli;
 
+require_once __DIR__."/../../../enums/GenericDAOOperations.php";
+require_once __DIR__."/../../../models/Appointment.php";
 require_once __DIR__."/../AppointmentDAO.php";
 require_once __DIR__."/GenericMySQLiDAO.php";
 
 use com\andersonlemos\db\dao\AppointmentDAO;
+use com\andersonlemos\enums\GenericDAOOperations;
+use com\andersonlemos\models\Appointment;
 
 class AppointmentMySQLiDAO extends GenericMysqliDAO implements AppointmentDAO {
 
@@ -15,6 +19,42 @@ class AppointmentMySQLiDAO extends GenericMysqliDAO implements AppointmentDAO {
     public function __construct($connection = NULL) {
         parent::__construct("appointment", $connection);
     }
+
+    /* Returns the sql string for insert and update operations on appointment table. */
+    public function getSQLString($operation){
+        // TODO
+        return NULL;
+    }
+
+    /* Binds the parameters for execute the statement. */
+    public function bindParams($appointment, $stmt, $operation) {
+        // TODO
+    }
+
+    /* Creates an appointment object based on the result of a query from a statement and returns it. */
+    public function fillElementFromStatment($stmt) {
+        // TODO
+        return NULL;
+    }
+
+    /* AppointmentDAO specific functions */
+
+    public function findByOwnerId($ownerId) {
+        // TODO
+        return [];
+    }
+
+    public function findByContactId($contactId) {
+        // TODO
+        return [];
+    }
+
+    public function findContacts($appointmentId) {
+        // TODO
+        return [];
+    }
+
+    /* end of AppointmentDAO specific functions */
 
 }
 

@@ -141,6 +141,13 @@ class Appointment extends Bean {
     public function getOwnerId() {
         return is_object($this->owner) ? $this->owner->getId() : $this->owner;
     }
+
+
+    // TODO: remove contacts function
+    public function contacts() {
+        return $this->contacts;
+    }
+
 }
 
 ?>

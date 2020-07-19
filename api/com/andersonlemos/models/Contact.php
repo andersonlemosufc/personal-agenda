@@ -85,6 +85,13 @@ class Contact extends Person {
     public function getOwnerId() {
         return is_object($this->owner) ? $this->owner->getId() : $this->owner;
     }
+
+
+    // TODO: remove appointments function
+    public function appointments() {
+        return $this->appointments;
+    }
+
 }
 
 ?>

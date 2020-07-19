@@ -58,6 +58,16 @@ class Owner extends Person {
             "password=".$this->password.
         "]";
     }
+
+
+    // TODO: remove contacts and appointments functions
+    public function contacts() {
+        return $this->contacts;
+    }
+
+    public function appointments() {
+        return $this->appointments;
+    }
 }
 
 ?>
