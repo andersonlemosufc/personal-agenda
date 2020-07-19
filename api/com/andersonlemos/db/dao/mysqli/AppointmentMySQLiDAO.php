@@ -5,6 +5,7 @@ require_once __DIR__."/../../../enums/GenericDAOOperations.php";
 require_once __DIR__."/../../../models/Appointment.php";
 require_once __DIR__."/../AppointmentDAO.php";
 require_once __DIR__."/GenericMySQLiDAO.php";
+require_once __DIR__."/ContactMySQLiDAO.php";
 
 use com\andersonlemos\db\dao\AppointmentDAO;
 use com\andersonlemos\enums\GenericDAOOperations;
@@ -12,12 +13,15 @@ use com\andersonlemos\models\Appointment;
 
 class AppointmentMySQLiDAO extends GenericMysqliDAO implements AppointmentDAO {
 
+    private $contactDAO;
+
     /* construtor: calls the parent constructor passing the table name that this classe handle (appointment)
      * and the connection with the database.
      * If the database connection is NULL, the parent class will creates one that is not.
      * */
     public function __construct($connection = NULL) {
         parent::__construct("appointment", $connection);
+        $this->contactDAO = new ContactMySQLiDAO($this->connection);
     }
 
     /* Returns the sql string for insert and update operations on appointment table. */
@@ -50,8 +54,7 @@ class AppointmentMySQLiDAO extends GenericMysqliDAO implements AppointmentDAO {
     }
 
     public function findContacts($appointmentId) {
-        // TODO
-        return [];
+        return $this->contactDAO->findByAppointment($appointmentId);
     }
 
     /* end of AppointmentDAO specific functions */

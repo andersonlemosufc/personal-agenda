@@ -5,6 +5,8 @@ require_once __DIR__."/../../../enums/GenericDAOOperations.php";
 require_once __DIR__."/../../../models/Owner.php";
 require_once __DIR__."/../OwnerDAO.php";
 require_once __DIR__."/GenericMySQLiDAO.php";
+require_once __DIR__."/ContactMySQLiDAO.php";
+require_once __DIR__."/AppointmentMySQLiDAO.php";
 
 use com\andersonlemos\db\dao\OwnerDAO;
 use com\andersonlemos\enums\GenericDAOOperations;
@@ -12,12 +14,17 @@ use com\andersonlemos\models\Owner;
 
 class OwnerMySQLiDAO extends GenericMysqliDAO implements OwnerDAO {
 
+    private $contactDAO;
+    private $appointmentDAO;
+
     /* construtor: calls the parent constructor passing the table name that this classe handle (owner)
      * and the connection with the database.
      * If the database connection is NULL, the parent class will creates one that is not.
      * */
     public function __construct($connection = NULL) {
         parent::__construct("owner", $connection);
+        $this->contactDAO = new ContactMySQLiDAO($this->connection);
+        $this->appointmentDAO = new ContactMySQLiDAO($this->connection);
     }
 
     /* Returns the sql string for insert and update operations on owner table. */
@@ -78,13 +85,11 @@ class OwnerMySQLiDAO extends GenericMysqliDAO implements OwnerDAO {
     /* OwnerDAO specific functions */
 
     public function findContacts($ownerId) {
-        // TODO
-        return [];
+        return $this->contactDAO->findByOwnerId($ownerId);
     }
 
     public function findAppointments($ownerId) {
-        // TODO
-        return [];
+        return $this->appointmentDAO->findByOwnerId($ownerId);
     }
 
     /* end of OwnerDAO specific functions */
