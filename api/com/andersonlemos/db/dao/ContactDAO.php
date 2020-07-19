@@ -14,7 +14,7 @@ interface ContactDAO extends GenericDAO {
     /* Receives an appointment id and searches in the database for the contacts in the appointment that has this id.
      * Returns the list of contacts that belonging to the appoitment with that id.
      * */
-    public function findByAppointment($appointmentId);
+    public function findByAppointmentId($appointmentId);
 
     /* Receives a contact id and searches in the database for the appointments with the contact that has this id.
      * Returns the list of appointments with the contact that the id belongs.

@@ -23,31 +23,73 @@ class ContactMySQLiDAO extends GenericMysqliDAO implements ContactDAO {
 
     /* Returns the sql string for insert and update operations on contact table. */
     public function getSQLString($operation){
-        // TODO
-        return NULL;
+        switch ($operation) {
+            case GenericDAOOperations::INSERT:
+                return "INSERT INTO contact (name, date_of_birth, phone, email, photo, address_id, comments, favorite, owner_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            case GenericDAOOperations::UPDATE:
+                return "UPDATE contact SET name=?, date_of_birth=?, phone=?, email=?, photo=?, address_id=?, comments=?, favorite=?, owner_id=? WHERE id=?";
+        }
     }
 
     /* Binds the parameters for execute the statement. */
     public function bindParams($contact, $stmt, $operation) {
-        // TODO
+
+        $id = $contact->getId();
+        $name = $contact->getName();
+        $dateOfBirth = $contact->getDateOfBirth();
+        $phone = $contact->getPhone();
+        $email = $contact->getEmail();
+        $photo = $contact->getPhoto();
+        $addressId = $contact->getAddressId();
+        $comments = $contact->getComments();
+        $favorite = $contact->isFavorite();
+        $ownerId = $contact->getOwnerId();
+
+        switch ($operation) {
+            case GenericDAOOperations::INSERT:
+                $stmt->bind_param("sssssisii", $name, $dateOfBirth, $phone, $email, $photo, $addressId, $comments, $favorite, $ownerId);
+                break;
+            case GenericDAOOperations::UPDATE:
+                $stmt->bind_param("sssssisiii", $name, $dateOfBirth, $phone, $email, $photo, $addressId, $comments, $favorite, $ownerId, $id);
+                break;
+        }
     }
 
     /* Creates an contact object based on the result of a query from a statement and returns it. */
     public function fillElementFromStatment($stmt) {
-        // TODO
-        return NULL;
+        $contact = NULL;
+
+        $id = NULL;
+        $name = NULL;
+        $dateOfBirth = NULL;
+        $phone = NULL;
+        $email = NULL;
+        $photo = NULL;
+        $addressId = NULL;
+        $comments = NULL;
+        $favorite = NULL;
+        $ownerId = NULL;
+
+        $stmt->bind_result($id, $name, $dateOfBirth, $phone, $email, $photo, $addressId, $comments, $favorite, $ownerId);
+
+        if ($stmt->fetch()) {
+            $contact = new Contact($id, $name, $dateOfBirth, $phone, $email, $photo, $addressId, $comments, $favorite, $ownerId, NULL);
+        }
+
+        return $contact;
     }
 
     /* ContactDAO specific functions */
 
     public function findByOwnerId($ownerId) {
-        // TODO
-        return [];
+        return $this->findByField("owner_id", $ownerId, "i");
     }
 
-    public function findByAppointment($appointmentId) {
-        // TODO
-        return [];
+    public function findByAppointmentId($appointmentId) {
+        $sql = "SELECT contact.* FROM contact, contact_appointment WHERE contact.id=contact_appointment.contact_id AND contact_appointment.id=?";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bind_param("i", $appointmentId);
+        return $this->executeQuery($stmt);
     }
 
     public function findAppointments($contactId) {

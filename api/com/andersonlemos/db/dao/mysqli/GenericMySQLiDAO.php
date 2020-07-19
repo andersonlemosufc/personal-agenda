@@ -79,25 +79,12 @@ abstract class GenericMySQLiDAO implements GenericDAO {
     }
 
     public function findById($elementId) {
-        $sql = "SELECT * FROM ".$this->tableName." WHERE id=?";
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bind_param("i", $elementId);
-        $stmt->execute();
-        $element = $this->fillElementFromStatment($stmt);
-        $stmt->close();
-        return $element;
+        $elements = $this->findByField("id", $elementId, "i");
+        return (count($elements) === 1) ? $elements[0] : NULL;
     }
 
     public function findAll() {
-        $sql = "SELECT * FROM ".$this->tableName;
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute();
-        $elements = [];
-        while ($element = $this->fillElementFromStatment($stmt)) {
-            array_push($elements, $element);
-        }
-        $stmt->close();
-        return $elements;
+        return $this->findByField();
     }
 
     /* end of DAO default functions */
@@ -119,6 +106,35 @@ abstract class GenericMySQLiDAO implements GenericDAO {
         }
         $stmt->close();
         return $element;
+    }
+
+    /* Receives a field, a value, and a string type and returns all elements from the table that has the property
+     * in the column field equals to the value (column[field]=value).
+     * The string type is the initial character of the string type of the passed value (used on the bind_param).
+     * If one of these parameters is not passed, the method will return all the elements in the table.
+     * */
+    protected function findByField($field = NULL, $value = NULL, $stringType = NULL) {
+        $hasWhereClause = boolval($field && $value && $stringType);
+        $sql = "SELECT * FROM ".$this->tableName;
+        if ($hasWhereClause) {
+            $sql = $sql." WHERE ".$field."=?";
+        }
+        $stmt = $this->connection->prepare($sql);
+        if ($hasWhereClause) {
+            $stmt->bind_param($stringType, $value);
+        }
+        return $this->executeQuery($stmt);
+    }
+
+    /* Receives a query statement, execute it and returns the list of elements resulted from the query */
+    protected function executeQuery($stmt) {
+        $stmt->execute();
+        $elements = [];
+        while ($element = $this->fillElementFromStatment($stmt)) {
+            array_push($elements, $element);
+        }
+        $stmt->close();
+        return $elements;
     }
 
 }
