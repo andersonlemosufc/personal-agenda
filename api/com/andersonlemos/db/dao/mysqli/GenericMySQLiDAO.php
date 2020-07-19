@@ -13,6 +13,7 @@ abstract class GenericMySQLiDAO implements GenericDAO {
 
     protected $tableName;
     protected $connection;
+    private $dbConnection;
 
     /* constructor
      * Receives the table name to know winch table it is handle and the database connection.
@@ -23,15 +24,14 @@ abstract class GenericMySQLiDAO implements GenericDAO {
         $this->connection = $this->connection;
 
         if (is_null($this->connection)) {
-            $this->connection = DBConnection::getConnection();
+            $this->dbConnection = new DBConnection();
+            $this->connection = $this->dbConnection->getConnection();
         }
     }
 
-    /* destructor: closes the connection link with the database. */
+    // TODO: remove this method
     public function __destruct() {
-        // TODO: remove this line
         echo("fechando ".$this->tableName." ");
-        DBConnection::close($this->connection);
     }
 
     /* abstract methods that must be implemented by the children classes. */
