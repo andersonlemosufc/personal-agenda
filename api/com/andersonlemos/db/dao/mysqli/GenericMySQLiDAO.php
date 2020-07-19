@@ -29,6 +29,8 @@ abstract class GenericMySQLiDAO implements GenericDAO {
 
     /* destructor: closes the connection link with the database. */
     public function __destruct() {
+        // TODO: remove this line
+        echo("fechando ".$this->tableName." ");
         DBConnection::close($this->connection);
     }
 
