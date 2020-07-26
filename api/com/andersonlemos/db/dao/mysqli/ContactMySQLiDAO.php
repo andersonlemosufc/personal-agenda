@@ -3,6 +3,7 @@ namespace com\andersonlemos\db\dao\mysqli;
 
 require_once __DIR__."/../../../enums/GenericDAOOperations.php";
 require_once __DIR__."/../../../models/Contact.php";
+require_once __DIR__."/../../../utils/Helpers.php";
 require_once __DIR__."/../ContactDAO.php";
 require_once __DIR__."/GenericMySQLiDAO.php";
 require_once __DIR__."/AppointmentMySQLiDAO.php";
@@ -10,6 +11,8 @@ require_once __DIR__."/AppointmentMySQLiDAO.php";
 use com\andersonlemos\db\dao\ContactDAO;
 use com\andersonlemos\enums\GenericDAOOperations;
 use com\andersonlemos\models\Contact;
+use com\andersonlemos\utils\Helpers;
+use DateTime;
 
 class ContactMySQLiDAO extends GenericMysqliDAO implements ContactDAO {
 
@@ -36,7 +39,7 @@ class ContactMySQLiDAO extends GenericMysqliDAO implements ContactDAO {
 
         $id = $contact->getId();
         $name = $contact->getName();
-        $dateOfBirth = $contact->getDateOfBirth();
+        $dateOfBirth = Helpers::dateTimeToDefaultFormat($contact->getDateOfBirth());
         $phone = $contact->getPhone();
         $email = $contact->getEmail();
         $photo = $contact->getPhoto();
@@ -57,6 +60,7 @@ class ContactMySQLiDAO extends GenericMysqliDAO implements ContactDAO {
 
     /* Creates an contact object based on the result of a query from a statement and returns it. */
     public function fillElementFromStatment($stmt) {
+
         $contact = NULL;
 
         $id = NULL;
@@ -73,7 +77,7 @@ class ContactMySQLiDAO extends GenericMysqliDAO implements ContactDAO {
         $stmt->bind_result($id, $name, $dateOfBirth, $phone, $email, $photo, $addressId, $comments, $favorite, $ownerId);
 
         if ($stmt->fetch()) {
-            $contact = new Contact($id, $name, $dateOfBirth, $phone, $email, $photo, $addressId, $comments, $favorite, $ownerId, NULL);
+            $contact = new Contact($id, $name, new DateTime($dateOfBirth), $phone, $email, $photo, $addressId, $comments, $favorite, $ownerId, NULL);
         }
 
         return $contact;
@@ -86,7 +90,7 @@ class ContactMySQLiDAO extends GenericMysqliDAO implements ContactDAO {
     }
 
     public function findByAppointmentId($appointmentId) {
-        $sql = "SELECT contact.* FROM contact, contact_appointment WHERE contact.id=contact_appointment.contact_id AND contact_appointment.id=?";
+        $sql = "SELECT contact.* FROM contact, contact_appointment WHERE contact.id=contact_appointment.contact_id AND contact_appointment.appointment_id=?";
         $stmt = $this->connection->prepare($sql);
         $stmt->bind_param("i", $appointmentId);
         return $this->executeQuery($stmt);

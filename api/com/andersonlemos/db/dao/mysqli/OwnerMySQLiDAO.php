@@ -3,6 +3,7 @@ namespace com\andersonlemos\db\dao\mysqli;
 
 require_once __DIR__."/../../../enums/GenericDAOOperations.php";
 require_once __DIR__."/../../../models/Owner.php";
+require_once __DIR__."/../../../utils/Helpers.php";
 require_once __DIR__."/../OwnerDAO.php";
 require_once __DIR__."/GenericMySQLiDAO.php";
 require_once __DIR__."/ContactMySQLiDAO.php";
@@ -11,6 +12,8 @@ require_once __DIR__."/AppointmentMySQLiDAO.php";
 use com\andersonlemos\db\dao\OwnerDAO;
 use com\andersonlemos\enums\GenericDAOOperations;
 use com\andersonlemos\models\Owner;
+use com\andersonlemos\utils\Helpers;
+use DateTime;
 
 class OwnerMySQLiDAO extends GenericMysqliDAO implements OwnerDAO {
 
@@ -37,7 +40,7 @@ class OwnerMySQLiDAO extends GenericMysqliDAO implements OwnerDAO {
 
         $id = $owner->getId();
         $name = $owner->getName();
-        $dateOfBirth = $owner->getDateOfBirth();
+        $dateOfBirth = Helpers::dateTimeToDefaultFormat($owner->getDateOfBirth());
         $phone = $owner->getPhone();
         $email = $owner->getEmail();
         $photo = $owner->getPhoto();
@@ -71,7 +74,7 @@ class OwnerMySQLiDAO extends GenericMysqliDAO implements OwnerDAO {
         $stmt->bind_result($id, $name, $dateOfBirth, $phone, $email, $photo, $addressId, $password);
 
         if ($stmt->fetch()) {
-            $owner = new Owner($id, $name, $dateOfBirth, $phone, $email, $photo, $addressId, $password, NULL, NULL);
+            $owner = new Owner($id, $name, new DateTime($dateOfBirth), $phone, $email, $photo, $addressId, $password, NULL, NULL);
         }
 
         return $owner;

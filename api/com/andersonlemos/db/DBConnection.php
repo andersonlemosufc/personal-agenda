@@ -27,8 +27,6 @@ class DBConnection {
             mysqli_close($this->connection);
             $this->connection = NULL;
         }
-        // TODO: remove this line
-        echo("closing connection<br>");
     }
 
 }

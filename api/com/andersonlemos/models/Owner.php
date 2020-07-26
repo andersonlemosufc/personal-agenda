@@ -154,15 +154,6 @@ class Owner extends Person {
         return NULL;
     }
 
-
-    // TODO: remove contacts and appointments functions
-    public function contacts() {
-        return $this->contacts;
-    }
-
-    public function appointments() {
-        return $this->appointments;
-    }
 }
 
 ?>

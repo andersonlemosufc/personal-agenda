@@ -93,10 +93,11 @@ abstract class Person extends Bean {
 
     /* toString: returns object properties as a string. */
     public function __toString() {
+        $dateOfBirthStr = is_null($this->dateOfBirth) ? NULL : $this->dateOfBirth->format("Y-m-d");
         return "[".
             "id=".$this->id.", ".
             "name=".$this->name.", ".
-            "date of birth=".$this->dateOfBirth.", ".
+            "date of birth=".$dateOfBirthStr.", ".
             "phone=".$this->phone.", ".
             "email=".$this->email.", ".
             "address=".$this->address.

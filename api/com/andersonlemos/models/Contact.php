@@ -143,11 +143,6 @@ class Contact extends Person {
         return NULL;
     }
 
-    // TODO: remove appointments function
-    public function appointments() {
-        return $this->appointments;
-    }
-
 }
 
 ?>

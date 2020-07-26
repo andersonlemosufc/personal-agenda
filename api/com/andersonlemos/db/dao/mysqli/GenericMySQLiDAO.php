@@ -29,11 +29,6 @@ abstract class GenericMySQLiDAO implements GenericDAO {
         }
     }
 
-    // TODO: remove this method
-    public function __destruct() {
-        echo("fechando ".$this->tableName." ");
-    }
-
     /* abstract methods that must be implemented by the children classes. */
 
     /* Receives the operation that will be done and returns the sql string to do that operation.

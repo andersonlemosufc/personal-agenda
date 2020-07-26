@@ -14,43 +14,37 @@ use com\andersonlemos\db\dao\mysqli\AddressMySQLiDAO;
 
 class Appointment extends Bean {
 
-    private $date;
-    private $startTime;
-    private $endTime;
+    private $start;
+    private $end;
     private $description;
     private $repeat;
-    private $address;
+    private $place;
     private $owner;
     private $contacts;
 
     /* constructor (by default, if a argument is not passed, it will be NULL,
      * except the contacts array, initialized with an empty array and repeat, initialized with NO_REPEAT constant).
      * */
-    public function __construct($id = NULL, $date = NULL, $startTime = NULL, $endTime = NULL, $description = NULL,
-            $repeat = AppointmentRepeat::NO_REPEAT, $address = NULL, $owner = NULL, $contacts = []) {
+    public function __construct($id = NULL, $start = NULL, $end = NULL, $description = NULL,
+        $repeat = AppointmentRepeat::NO_REPEAT, $place = NULL, $owner = NULL, $contacts = []) {
         parent::__construct($id);
-        $this->date = $date;
-        $this->startTime = $startTime;
-        $this->endTime = $endTime;
+        $this->start = $start;
+        $this->end = $end;
         $this->description = $description;
         $this->repeat = $repeat;
-        $this->address = $address;
+        $this->place = $place;
         $this->owner = $owner;
         $this->contacts = $contacts;
     }
 
     /* gets */
 
-    public function getDate() {
-        return $this->date;
+    public function getStart() {
+        return $this->start;
     }
 
-    public function getStartTime() {
-        return $this->startTime;
-    }
-
-    public function getEndTime() {
-        return $this->endTime;
+    public function getEnd() {
+        return $this->end;
     }
 
     public function getDescription() {
@@ -61,17 +55,17 @@ class Appointment extends Bean {
         return $this->repeat;
     }
 
-    public function getAddress() {
-        /* The address attribute can keep the address object itself or just the id of the address object.
+    public function getPlace() {
+        /* The place attribute can keep the address object itself or just the id of the address object.
          * It happens when the appointment is retrieved from the database, the intern objects are
          * not loaded. They will be loaded only if necessary (lazy initialization).
          * So, if we have only the address id, we will find the address object in the database.
          * */
-        if (is_integer($this->address)) {
+        if (is_integer($this->place)) {
             $addressDAO = new AddressMySQLiDAO();
-            $this->address = $addressDAO->findById($this->address);
+            $this->place = $addressDAO->findById($this->place);
         }
-        return $this->address;
+        return $this->place;
     }
 
     public function getOwner() {
@@ -105,16 +99,12 @@ class Appointment extends Bean {
 
     /* sets */
 
-    public function setDate($date) {
-        $this->date = $date;
+    public function setStart($start) {
+        $this->start = $start;
     }
 
-    public function setStartTime($startTime) {
-        $this->startTime = $startTime;
-    }
-
-    public function setEndTime($endTime) {
-        $this->endTime = $endTime;
+    public function setEnd($end) {
+        $this->end = $end;
     }
 
     public function setDescription($description) {
@@ -125,8 +115,8 @@ class Appointment extends Bean {
         $this->repeat = $repeat;
     }
 
-    public function setAddress($address) {
-        $this->address = $address;
+    public function setPlace($place) {
+        $this->place = $place;
     }
 
     public function setOwner($owner) {
@@ -145,25 +135,28 @@ class Appointment extends Bean {
         if (is_object($this->owner)) {
             $ownerStr = "[id=".$this->owner->getId().", name=".$this->owner->getName()."]";
         }
+
+        $startStr = is_null($this->start) ? NULL : $this->start->format("Y-m-d H:i");
+        $endStr = is_null($this->end) ? NULL : $this->end->format("Y-m-d H:i");
+
         return "[".
             "id=".$this->id.", ".
-            "date=".$this->date.", ".
-            "startTime=".$this->startTime.", ".
-            "endTime=".$this->endTime.", ".
+            "start=".$startStr.", ".
+            "end=".$endStr.", ".
             "description=".$this->description.", ".
             "repeat=".$this->repeat.", ".
-            "address=".$this->address.", ".
+            "place=".$this->place.", ".
             "owner=".$ownerStr.
         "]";
     }
 
     /* other methods */
 
-    /* Returns the id of the address of the appointment.
+    /* Returns the id of the address (place) of the appointment.
      * The attribute address can keep the id itself (because of the lazy initialization) or the object address
      * */
-    public function getAddressId() {
-        return is_object($this->address) ? $this->address->getId() : $this->address;
+    public function getPlaceId() {
+        return is_object($this->place) ? $this->place->getId() : $this->place;
     }
 
     /* Returns the id of the owner of the appointment.
@@ -206,11 +199,6 @@ class Appointment extends Bean {
             }
         }
         return NULL;
-    }
-
-    // TODO: remove contacts function
-    public function contacts() {
-        return $this->contacts;
     }
 
 }
