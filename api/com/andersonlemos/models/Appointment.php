@@ -1,49 +1,50 @@
 <?php
 namespace com\andersonlemos\models;
 
+require_once __DIR__."/../db/dao/mysqli/AppointmentMySQLiDAO.php";
+require_once __DIR__."/../db/dao/mysqli/OwnerMySQLiDAO.php";
+require_once __DIR__."/../db/dao/mysqli/AddressMySQLiDAO.php";
 require_once __DIR__."/../enums/AppointmentRepeat.php";
 require_once __DIR__."/Bean.php";
 
 use com\andersonlemos\enums\AppointmentRepeat;
+use com\andersonlemos\db\dao\mysqli\AppointmentMySQLiDAO;
+use com\andersonlemos\db\dao\mysqli\OwnerMySQLiDAO;
+use com\andersonlemos\db\dao\mysqli\AddressMySQLiDAO;
 
 class Appointment extends Bean {
 
-    private $date;
-    private $startTime;
-    private $endTime;
+    private $start;
+    private $end;
     private $description;
     private $repeat;
-    private $address;
+    private $place;
     private $owner;
     private $contacts;
 
     /* constructor (by default, if a argument is not passed, it will be NULL,
-     * except the contacts array, initialized with an empty array and repeat, initialized with NO_REPEAT constant). */
-    public function __construct($id = NULL, $date = NULL, $startTime = NULL, $endTime = NULL, $description = NULL,
-            $repeat = AppointmentRepeat::NO_REPEAT, $address = NULL, $owner = NULL, $contacts = []) {
+     * except the contacts array, initialized with an empty array and repeat, initialized with NO_REPEAT constant).
+     * */
+    public function __construct($id = NULL, $start = NULL, $end = NULL, $description = NULL,
+        $repeat = AppointmentRepeat::NO_REPEAT, $place = NULL, $owner = NULL, $contacts = []) {
         parent::__construct($id);
-        $this->date = $date;
-        $this->startTime = $startTime;
-        $this->endTime = $endTime;
+        $this->start = $start;
+        $this->end = $end;
         $this->description = $description;
         $this->repeat = $repeat;
-        $this->address = $address;
+        $this->place = $place;
         $this->owner = $owner;
         $this->contacts = $contacts;
     }
 
     /* gets */
 
-    public function getDate() {
-        return $this->date;
+    public function getStart() {
+        return $this->start;
     }
 
-    public function getStartTime() {
-        return $this->startTime;
-    }
-
-    public function getEndTime() {
-        return $this->endTime;
+    public function getEnd() {
+        return $this->end;
     }
 
     public function getDescription() {
@@ -54,18 +55,43 @@ class Appointment extends Bean {
         return $this->repeat;
     }
 
-    public function getAddress() {
-        // TODO: lazy initialization
-        return $this->address;
+    public function getPlace() {
+        /* The place attribute can keep the address object itself or just the id of the address object.
+         * It happens when the appointment is retrieved from the database, the intern objects are
+         * not loaded. They will be loaded only if necessary (lazy initialization).
+         * So, if we have only the address id, we will find the address object in the database.
+         * */
+        if (is_integer($this->place)) {
+            $addressDAO = new AddressMySQLiDAO();
+            $this->place = $addressDAO->findById($this->place);
+        }
+        return $this->place;
     }
 
     public function getOwner() {
-        // TODO: lazy initialization
+        /* The owner attribute can keep the owner object itself or just the id of the owner object.
+         * It happens when the appointment is retrieved from the database, the intern objects are
+         * not loaded. They will be loaded only if necessary (lazy initialization).
+         * So, if we have only the owner id, we will find the owner object in the database.
+         * */
+        if (is_integer($this->owner)) {
+            $ownerDAO = new OwnerMySQLiDAO();
+            $this->owner = $ownerDAO->findById($this->owner);
+        }
         return $this->owner;
     }
 
     public function getContacts() {
-        // TODO: lazy initialization
+        /* The contacts attribute can keep the list of contacts objects itself or NULL. If it is NULL don't mean
+         * the list is empty (in this case, it will be an empty list, []). The NULL value means the list was not
+         * loaded from the database yet. It happens when the appointment is retrieved from the database, the intern objects are
+         * not loaded. They will be loaded only if necessary (lazy initialization).
+         * So, if the contacts attribute is NULL, we will find the contacts objects in the database.
+         * */
+        if (is_null($this->contacts)) {
+            $appointmentDAO = new AppointmentMySQLiDAO();
+            $this->contacts = $appointmentDAO->findContacts($this->id);
+        }
         return $this->contacts;
     }
 
@@ -73,16 +99,12 @@ class Appointment extends Bean {
 
     /* sets */
 
-    public function setDate($date) {
-        $this->date = $date;
+    public function setStart($start) {
+        $this->start = $start;
     }
 
-    public function setStartTime($startTime) {
-        $this->startTime = $startTime;
-    }
-
-    public function setEndTime($endTime) {
-        $this->endTime = $endTime;
+    public function setEnd($end) {
+        $this->end = $end;
     }
 
     public function setDescription($description) {
@@ -93,8 +115,8 @@ class Appointment extends Bean {
         $this->repeat = $repeat;
     }
 
-    public function setAddress($address) {
-        $this->address = $address;
+    public function setPlace($place) {
+        $this->place = $place;
     }
 
     public function setOwner($owner) {
@@ -113,25 +135,28 @@ class Appointment extends Bean {
         if (is_object($this->owner)) {
             $ownerStr = "[id=".$this->owner->getId().", name=".$this->owner->getName()."]";
         }
+
+        $startStr = is_null($this->start) ? NULL : $this->start->format("Y-m-d H:i");
+        $endStr = is_null($this->end) ? NULL : $this->end->format("Y-m-d H:i");
+
         return "[".
             "id=".$this->id.", ".
-            "date=".$this->date.", ".
-            "startTime=".$this->startTime.", ".
-            "endTime=".$this->endTime.", ".
+            "start=".$startStr.", ".
+            "end=".$endStr.", ".
             "description=".$this->description.", ".
             "repeat=".$this->repeat.", ".
-            "address=".$this->address.", ".
+            "place=".$this->place.", ".
             "owner=".$ownerStr.
         "]";
     }
 
     /* other methods */
 
-    /* Returns the id of the address of the appointment.
+    /* Returns the id of the address (place) of the appointment.
      * The attribute address can keep the id itself (because of the lazy initialization) or the object address
      * */
-    public function getAddressId() {
-        return is_object($this->address) ? $this->address->getId() : $this->address;
+    public function getPlaceId() {
+        return is_object($this->place) ? $this->place->getId() : $this->place;
     }
 
     /* Returns the id of the owner of the appointment.
@@ -140,6 +165,42 @@ class Appointment extends Bean {
     public function getOwnerId() {
         return is_object($this->owner) ? $this->owner->getId() : $this->owner;
     }
+
+    /* Receives a contact and add it to the contacts list */
+    public function addContact($contact) {
+        $contacts = $this->getContacts();
+        array_push($contacts, $contact);
+    }
+
+    /* Receives a contact id and returns from the contacts list the contact with this id.
+     * If the contact is not in the contacts list, the method will return NULL.
+     * */
+    public function removeContact($contactId) {
+        $contacts = $this->getContacts();
+        $index = 0;
+        foreach ($contacts as $contact) {
+            if ($contact->getId() === $contactId) {
+                array_splice($contacts, $index, 1);
+                return true;
+            }
+            $index++;
+        }
+        return false;
+    }
+
+    /* Receives a contact id and removes from the contacts list the contact with this id.
+     * Returns true if the there is a contact with this id in the list (and it was removed) or false if there is not.
+     * */
+    public function getContact($contactId) {
+        $contacts = $this->getContacts();
+        foreach ($contacts as $contact) {
+            if ($contact->getId() === $contactId) {
+                return $contact;
+            }
+        }
+        return NULL;
+    }
+
 }
 
 ?>

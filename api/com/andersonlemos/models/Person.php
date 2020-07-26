@@ -1,7 +1,10 @@
 <?php
 namespace com\andersonlemos\models;
 
+require_once __DIR__."/../db/dao/mysqli/AddressMySQLiDAO.php";
 require_once __DIR__."/Bean.php";
+
+use com\andersonlemos\db\dao\mysqli\AddressMySQLiDAO;
 
 abstract class Person extends Bean {
 
@@ -46,7 +49,15 @@ abstract class Person extends Bean {
     }
 
     public function getAddress() {
-        // TODO: lazy initialization
+        /* The address attribute can keep the address object itself or just the id of the address object.
+         * It happens when the person (owner or contact) is retrieved from the database, the intern objects are
+         * not loaded. They will be loaded only if necessary (lazy initialization).
+         * So, if we have only the address id, we will find the address object in the database.
+         * */
+        if (is_integer($this->address)) {
+            $addressDAO = new AddressMySQLiDAO();
+            $this->address = $addressDAO->findById($this->address);
+        }
         return $this->address;
     }
 
@@ -82,10 +93,11 @@ abstract class Person extends Bean {
 
     /* toString: returns object properties as a string. */
     public function __toString() {
+        $dateOfBirthStr = is_null($this->dateOfBirth) ? NULL : $this->dateOfBirth->format("Y-m-d");
         return "[".
             "id=".$this->id.", ".
             "name=".$this->name.", ".
-            "date of birth=".$this->dateOfBirth.", ".
+            "date of birth=".$dateOfBirthStr.", ".
             "phone=".$this->phone.", ".
             "email=".$this->email.", ".
             "address=".$this->address.
