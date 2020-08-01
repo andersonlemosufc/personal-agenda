@@ -115,6 +115,42 @@ class Address extends Bean {
         "]";
     }
 
+    /* methods to handle with api requests */
+
+    /* Returns the address in an associative array form */
+    public function toMap() {
+        return array(
+            "id" => $this->id,
+            "street" => $this->street,
+            "number" => $this->number,
+            "complement" => $this->complement,
+            "neighborhood" => $this->neighborhood,
+            "postalCode" => $this->postalCode,
+            "city" => $this->city,
+            "state" => $this->state,
+            "country" => $this->country
+        );
+    }
+
+    /* Receives a map that is an associative array with the attribuites of an address.
+     * Returns an address object with the attributes of the associative array */
+    public function fromMap($map) {
+        if (!is_null($map) && is_array($map)) {
+            $this->id = array_key_exists("id", $map) ? $map["id"] : NULL;
+            $this->street = array_key_exists("street", $map) ? $map["street"] : NULL;
+            $this->number = array_key_exists("number", $map) ? $map["number"] : NULL;
+            $this->complement = array_key_exists("complement", $map) ? $map["complement"] : NULL;
+            $this->neighborhood = array_key_exists("neighborhood", $map) ? $map["neighborhood"] : NULL;
+            $this->postalCode = array_key_exists("postalCode", $map) ? $map["postalCode"] : NULL;
+            $this->city = array_key_exists("city", $map) ? $map["city"] : NULL;
+            $this->state = array_key_exists("state", $map) ? $map["state"] : NULL;
+            $this->country = array_key_exists("country", $map) ? $map["country"] : NULL;
+        }
+        return $this;
+    }
+
+    /* end of methods to api requests */
+
 }
 
 ?>

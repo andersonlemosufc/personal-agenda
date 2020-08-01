@@ -82,6 +82,26 @@ class Owner extends Person {
         "]";
     }
 
+    /* methods to handle with api requests */
+
+    /* Returns the address in an associative array form */
+    public function toMap() {
+        return array(
+            "id" => $this->id,
+        );
+    }
+
+    /* Receives a map that is an associative array with the attribuites of an address.
+     * Returns an address object with the attributes of the associative array */
+    public function fromMap($map) {
+        if (!is_null($map) && is_array($map)) {
+            $this->id = array_key_exists("id", $map) ? $map["id"] : NULL;
+        }
+        return $this;
+    }
+
+    /* end of methods to api requests */
+
     /* other methods */
 
     /* Receives a contact and add it to the contacts list */
