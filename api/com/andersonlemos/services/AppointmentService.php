@@ -3,6 +3,7 @@ namespace com\andersonlemos\services;
 
 require_once __DIR__."/../db/dao/mysqli/AppointmentMySQLiDAO.php";
 require_once __DIR__."/GenericService.php";
+require_once __DIR__."/ContactService.php";
 
 use com\andersonlemos\db\dao\mysqli\AppointmentMySQLiDAO;
 
@@ -13,10 +14,13 @@ class AppointmentService extends GenericService {
         parent::__construct(new AppointmentMySQLiDAO());
     }
 
-    /* Receives an appointment id and a contact and add that contact to the contacts list of the appointment with this id in the database */
-    public function addContact($appointmentId, $contact) {
+    /* Receives an appointment id and a contact id and add that contact to the contacts list of the appointment with this id in the database */
+    public function addContact($appointmentId, $contactId) {
         $appointment = $this->get($appointmentId);
-        if (is_null($appointment->getContact($contact->getId()))) {
+        $contact = $appointment->getContact($contactId);
+        if (is_null($contact)) {
+            $contactService = new ContactService();
+            $contact = $contactService->get($contactId);
             $appointment->addContact($contact);
             $this->update($appointment);
         }
