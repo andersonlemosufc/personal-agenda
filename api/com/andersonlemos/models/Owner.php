@@ -86,19 +86,19 @@ class Owner extends Person {
 
     /* Receives a contact and add it to the contacts list */
     public function addContact($contact) {
-        $contacts = $this->getContacts();
-        array_push($contacts, $contact);
+        $this->getContacts();
+        array_push($this->contacts, $contact);
     }
 
-    /* Receives a contact id and returns from the contacts list the contact with this id.
-     * If the contact is not in the contacts list, the method will return NULL.
+    /* Receives a contact id and removes from the contacts list the contact with this id.
+     * Returns true if there is a contact with this id in the list (and it was removed) or false if there is not.
      * */
     public function removeContact($contactId) {
-        $contacts = $this->getContacts();
+        $this->getContacts();
         $index = 0;
-        foreach ($contacts as $contact) {
+        foreach ($this->contacts as $contact) {
             if ($contact->getId() === $contactId) {
-                array_splice($contacts, $index, 1);
+                array_splice($this->contacts, $index, 1);
                 return true;
             }
             $index++;
@@ -106,12 +106,12 @@ class Owner extends Person {
         return false;
     }
 
-    /* Receives a contact id and removes from the contacts list the contact with this id.
-     * Returns true if the there is a contact with this id in the list (and it was removed) or false if there is not.
+    /* Receives a contact id and returns from the contacts list the contact with this id.
+     * If the contact is not in the contacts list, the method will return NULL.
      * */
     public function getContact($contactId) {
-        $contacts = $this->getContacts();
-        foreach ($contacts as $contact) {
+        $this->getContacts();
+        foreach ($this->contacts as $contact) {
             if ($contact->getId() === $contactId) {
                 return $contact;
             }
@@ -121,19 +121,19 @@ class Owner extends Person {
 
     /* Receives a appointment and add it to the appointments list */
     public function addAppointment($appointment) {
-        $appointments = $this->getAppointments();
-        array_push($appointments, $appointment);
+        $this->getAppointments();
+        array_push($this->appointments, $appointment);
     }
 
-    /* Receives a appointment id and returns from the appointments list the appointment with this id.
-     * If the appointment is not in the appointments list, the method will return NULL.
+    /* Receives a appointment id and removes from the appointments list the appointment with this id.
+     * Returns true if there is a appointment with this id in the list (and it was removed) or false if there is not.
      * */
     public function removeAppointment($appointmentId) {
-        $appointments = $this->getAppointments();
+        $this->getAppointments();
         $index = 0;
-        foreach ($appointments as $appointment) {
+        foreach ($this->appointments as $appointment) {
             if ($appointment->getId() === $appointmentId) {
-                array_splice($appointments, $index, 1);
+                array_splice($this->appointments, $index, 1);
                 return true;
             }
             $index++;
@@ -141,12 +141,12 @@ class Owner extends Person {
         return false;
     }
 
-    /* Receives a appointment id and removes from the appointments list the appointment with this id.
-     * Returns true if the there is a appointment with this id in the list (and it was removed) or false if there is not.
+    /* Receives a appointment id and returns from the appointments list the appointment with this id.
+     * If the appointment is not in the appointments list, the method will return NULL.
      * */
     public function getAppointment($appointmentId) {
-        $appointments = $this->getAppointments();
-        foreach ($appointments as $appointment) {
+        $this->getAppointments();
+        foreach ($this->appointments as $appointment) {
             if ($appointment->getId() === $appointmentId) {
                 return $appointment;
             }

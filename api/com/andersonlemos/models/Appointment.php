@@ -168,19 +168,19 @@ class Appointment extends Bean {
 
     /* Receives a contact and add it to the contacts list */
     public function addContact($contact) {
-        $contacts = $this->getContacts();
-        array_push($contacts, $contact);
+        $this->getContacts();
+        array_push($this->contacts, $contact);
     }
 
-    /* Receives a contact id and returns from the contacts list the contact with this id.
-     * If the contact is not in the contacts list, the method will return NULL.
+    /* Receives a contact id and removes from the contacts list the contact with this id.
+     * Returns true if there is a contact with this id in the list (and it was removed) or false if there is not.
      * */
     public function removeContact($contactId) {
-        $contacts = $this->getContacts();
+        $this->getContacts();
         $index = 0;
-        foreach ($contacts as $contact) {
+        foreach ($this->contacts as $contact) {
             if ($contact->getId() === $contactId) {
-                array_splice($contacts, $index, 1);
+                array_splice($this->contacts, $index, 1);
                 return true;
             }
             $index++;
@@ -188,12 +188,12 @@ class Appointment extends Bean {
         return false;
     }
 
-    /* Receives a contact id and removes from the contacts list the contact with this id.
-     * Returns true if the there is a contact with this id in the list (and it was removed) or false if there is not.
+    /* Receives a contact id and returns from the contacts list the contact with this id.
+     * If the contact is not in the contacts list, the method will return NULL.
      * */
     public function getContact($contactId) {
-        $contacts = $this->getContacts();
-        foreach ($contacts as $contact) {
+        $this->getContacts();
+        foreach ($this->contacts as $contact) {
             if ($contact->getId() === $contactId) {
                 return $contact;
             }

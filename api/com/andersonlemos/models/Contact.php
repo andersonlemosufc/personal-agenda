@@ -108,21 +108,21 @@ class Contact extends Person {
         return is_object($this->owner) ? $this->owner->getId() : $this->owner;
     }
 
-    /* Receives a appointment and add it to the appointments list */
+    /* Receives an appointment and add it to the appointments list */
     public function addAppointment($appointment) {
-        $appointments = $this->getAppointments();
-        array_push($appointments, $appointment);
+        $this->getAppointments();
+        array_push($this->appointments, $appointment);
     }
 
-    /* Receives a appointment id and returns from the appointments list the appointment with this id.
-     * If the appointment is not in the appointments list, the method will return NULL.
+    /* Receives an appointment id and removes from the appointments list the appointment with this id.
+     * Returns true if there is a appointment with this id in the list (and it was removed) or false if there is not.
      * */
     public function removeAppointment($appointmentId) {
-        $appointments = $this->getAppointments();
+        $this->getAppointments();
         $index = 0;
-        foreach ($appointments as $appointment) {
+        foreach ($this->appointments as $appointment) {
             if ($appointment->getId() === $appointmentId) {
-                array_splice($appointments, $index, 1);
+                array_splice($this->appointments, $index, 1);
                 return true;
             }
             $index++;
@@ -130,12 +130,12 @@ class Contact extends Person {
         return false;
     }
 
-    /* Receives a appointment id and removes from the appointments list the appointment with this id.
-     * Returns true if the there is a appointment with this id in the list (and it was removed) or false if there is not.
+    /* Receives an appointment id and returns from the appointments list the appointment with this id.
+     * If the appointment is not in the appointments list, the method will return NULL.
      * */
     public function getAppointment($appointmentId) {
-        $appointments = $this->getAppointments();
-        foreach ($appointments as $appointment) {
+        $this->getAppointments();
+        foreach ($this->appointments as $appointment) {
             if ($appointment->getId() === $appointmentId) {
                 return $appointment;
             }
