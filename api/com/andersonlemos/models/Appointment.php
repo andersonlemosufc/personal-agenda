@@ -173,7 +173,7 @@ class Appointment extends Bean {
     }
 
     /* Receives a contact id and removes from the contacts list the contact with this id.
-     * Returns true if the there is a contact with this id in the list (and it was removed) or false if there is not.
+     * Returns true if there is a contact with this id in the list (and it was removed) or false if there is not.
      * */
     public function removeContact($contactId) {
         $this->getContacts();
@@ -192,8 +192,8 @@ class Appointment extends Bean {
      * If the contact is not in the contacts list, the method will return NULL.
      * */
     public function getContact($contactId) {
-        $contacts = $this->getContacts();
-        foreach ($contacts as $contact) {
+        $this->getContacts();
+        foreach ($this->contacts as $contact) {
             if ($contact->getId() === $contactId) {
                 return $contact;
             }

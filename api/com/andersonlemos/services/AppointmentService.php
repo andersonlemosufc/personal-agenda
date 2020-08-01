@@ -24,7 +24,7 @@ class AppointmentService extends GenericService {
 
     /* Receives an appointment id and a contact id and removes from the contacts list of the appointment with the passed
      * appointment id, the contact with this contact id.
-     * Returns true if the there is a contact with this id in the list (and it was removed) or false if there is not.
+     * Returns true if there is a contact with this id in the list (and it was removed) or false if there is not.
      * */
     public function removeContact($appointmentId, $contactId) {
         $appointment = $this->get($appointmentId);
