@@ -3,8 +3,11 @@ namespace com\andersonlemos\models;
 
 require_once __DIR__."/../db/dao/mysqli/ContactMySQLiDAO.php";
 require_once __DIR__."/../db/dao/mysqli/OwnerMySQLiDAO.php";
+require_once __DIR__."/../utils/Helpers.php";
 require_once __DIR__."/Person.php";
 
+use DateTime;
+use com\andersonlemos\utils\Helpers;
 use com\andersonlemos\db\dao\mysqli\ContactMySQLiDAO;
 use com\andersonlemos\db\dao\mysqli\OwnerMySQLiDAO;
 
@@ -101,18 +104,74 @@ class Contact extends Person {
 
     /* methods to handle with api requests */
 
-    /* Returns the address in an associative array form */
-    public function toMap() {
+    /* Returns the contact object in an associative array form without the intern objects (just their ids). */
+    protected function toShallowMap() {
+
+        $appointmentsIds = !is_array($this->appointments) ? NULL : array_map(function ($appointment) {
+            return $appointment->getId();
+        }, $this->appointments);
+
         return array(
             "id" => $this->id,
+            "name" => $this->name,
+            "date_of_birth" => Helpers::dateTimeToDefaultFormat($this->dateOfBirth),
+            "phone" => $this->phone,
+            "email" => $this->email,
+            "photo" => $this->photo,
+            "address_id" => $this->getAddressId(),
+            "comments" => $this->comments,
+            "favorite" => $this->favorite,
+            "owner_id" => $this->getOwnerId(),
+            "appointments_ids" => $appointmentsIds
         );
     }
 
-    /* Receives a map that is an associative array with the attribuites of an address.
-     * Returns an address object with the attributes of the associative array */
+    /* Returns the contact in an associative array form */
+    public function toMap() {
+        $map = $this->toShallowMap();
+        $map["address"] = $this->address ? $this->address->toShallowMap() : NULL;
+        $map["owner"] = $this->owner ? $this->owner->toShallowMap() : NULL;
+
+        $map["appointments"] = !is_array($this->appointments) ? NULL : array_map(function ($appointment) {
+            return $appointment->toShallowMap();
+        }, $this->appointments);
+
+        return $map;
+    }
+
+    /* Receives a map that is an associative array with the attribuites of a contact.
+     * Returns a contact object with the attributes of the associative array */
     public function fromMap($map) {
         if (!is_null($map) && is_array($map)) {
             $this->id = array_key_exists("id", $map) ? $map["id"] : NULL;
+            $this->name = array_key_exists("name", $map) ? $map["name"] : NULL;
+            $this->dateOfBirth = array_key_exists("date_of_birth", $map) ? new DateTime($map["date_of_birth"]) : NULL;
+            $this->phone = array_key_exists("phone", $map) ? $map["phone"] : NULL;
+            $this->email = array_key_exists("email", $map) ? $map["email"] : NULL;
+            $this->photo = array_key_exists("photo", $map) ? $map["photo"] : NULL;
+            $this->comments = array_key_exists("comments", $map) ? $map["comments"] : NULL;
+            $this->favorite = array_key_exists("favorite", $map) ? $map["favorite"] : NULL;
+            $this->address = NULL;
+            $this->owner = NULL;
+            $this->appointments = NULL;
+
+            if (array_key_exists("address", $map) && is_array($map["address"])) {
+                $this->address = (new Address())->fromMap($map["address"]);
+            } elseif (array_key_exists("address_id", $map)) {
+                $this->address = $map["address_id"];
+            }
+
+            if (array_key_exists("owner", $map) && is_array($map["owner"])) {
+                $this->owner = (new Owner())->fromMap($map["owner"]);
+            } elseif (array_key_exists("owner_id", $map)) {
+                $this->owner = $map["owner_id"];
+            }
+
+            if (array_key_exists("appointments", $map) && is_array($map["appointments"])) {
+                $this->appointments = array_map(function ($appointmentMap) {
+                    return (new Appointment())->fromMap($appointmentMap);
+                }, $map["appointments"]);
+            }
         }
         return $this;
     }

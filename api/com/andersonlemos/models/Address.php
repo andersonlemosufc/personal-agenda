@@ -117,8 +117,8 @@ class Address extends Bean {
 
     /* methods to handle with api requests */
 
-    /* Returns the address in an associative array form */
-    public function toMap() {
+    /* Returns the address object in an associative array form without the intern objects (just their ids). */
+    protected function toShallowMap() {
         return array(
             "id" => $this->id,
             "street" => $this->street,

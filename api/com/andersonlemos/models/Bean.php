@@ -28,8 +28,13 @@ abstract class Bean {
 
     /* methods to handle with api requests */
 
+    /* Returns the bean object in an associative array form without the intern objects (just their ids). */
+    protected abstract function toShallowMap();
+
     /* Returns the bean object in an associative array form. */
-    public abstract function toMap();
+    public function toMap() {
+        return $this->toShallowMap();
+    }
 
     /* Receives a map that is an associative array with the attribuites of a bean object.
      * Fills the bean object with the attributes of the associative array and returns the object itself. */
