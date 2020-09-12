@@ -1,7 +1,7 @@
 <?php
 namespace com\andersonlemos\models;
 
-class Bean {
+abstract class Bean {
 
     protected $id;
 
@@ -25,6 +25,33 @@ class Bean {
     }
 
     /* end sets*/
+
+    /* methods to handle with api requests */
+
+    /* Returns the bean object in an associative array form without the intern objects (just their ids). */
+    protected abstract function toShallowMap();
+
+    /* Returns the bean object in an associative array form. */
+    public function toMap() {
+        return $this->toShallowMap();
+    }
+
+    /* Receives a map that is an associative array with the attribuites of a bean object.
+     * Fills the bean object with the attributes of the associative array and returns the object itself. */
+    public abstract function fromMap($map);
+
+    /* Returns the bean object in a json form. */
+    public function toJSON() {
+        return json_encode($this->toMap(), JSON_UNESCAPED_UNICODE);
+    }
+
+    /* Receives a json with the attribuites of a bean object.
+     * Fills the bean object with the attributes of json and returns the object itself. */
+    public function fromJSON($json) {
+        return $this->fromMap(json_decode($json, true));
+    }
+
+    /* end of methods to api requests */
 }
 
 ?>

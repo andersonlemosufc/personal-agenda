@@ -2,8 +2,11 @@
 namespace com\andersonlemos\models;
 
 require_once __DIR__."/../db/dao/mysqli/OwnerMySQLiDAO.php";
+require_once __DIR__."/../utils/Helpers.php";
 require_once __DIR__."/Person.php";
 
+use Datetime;
+use com\andersonlemos\utils\Helpers;
 use com\andersonlemos\db\dao\mysqli\OwnerMySQLiDAO;
 
 class Owner extends Person {
@@ -81,6 +84,85 @@ class Owner extends Person {
             "password=".$this->password.
         "]";
     }
+
+    /* methods to handle with api requests */
+
+    /* Returns the owner object in an associative array form without the intern objects (just their ids). */
+    protected function toShallowMap() {
+
+        $contactsIds = !is_array($this->contacts) ? NULL : array_map(function ($contact) {
+            return $contact->getId();
+        }, $this->contacts);
+
+        $appointmentsIds = !is_array($this->appointments) ? NULL : array_map(function ($appointment) {
+            return $appointment->getId();
+        }, $this->appointments);
+
+        return array(
+            "id" => $this->id,
+            "name" => $this->name,
+            "date_of_birth" => Helpers::dateTimeToDefaultFormat($this->dateOfBirth),
+            "phone" => $this->phone,
+            "email" => $this->email,
+            "photo" => $this->photo,
+            "address_id" => $this->getAddressId(),
+            "contacts_ids" => $contactsIds,
+            "appointments_ids" => $appointmentsIds
+        );
+    }
+
+    /* Returns the owner in an associative array form */
+    public function toMap() {
+        $map = $this->toShallowMap();
+        $map["address"] = $this->address ? $this->address->toShallowMap() : NULL;
+
+        $map["contacts"] = !is_array($this->contacts) ? NULL : array_map(function ($contact) {
+            return $contact->toShallowMap();
+        }, $this->contacts);
+
+        $map["appointments"] = !is_array($this->appointments) ? NULL : array_map(function ($appointment) {
+            return $appointment->toShallowMap();
+        }, $this->appointments);
+
+        return $map;
+    }
+
+    /* Receives a map that is an associative array with the attribuites of an owner.
+     * Returns an owner object with the attributes of the associative array */
+    public function fromMap($map) {
+        if (!is_null($map) && is_array($map)) {
+            $this->id = array_key_exists("id", $map) ? $map["id"] : NULL;
+            $this->name = array_key_exists("name", $map) ? $map["name"] : NULL;
+            $this->dateOfBirth = array_key_exists("date_of_birth", $map) ? new DateTime($map["date_of_birth"]) : NULL;
+            $this->phone = array_key_exists("phone", $map) ? $map["phone"] : NULL;
+            $this->email = array_key_exists("email", $map) ? $map["email"] : NULL;
+            $this->photo = array_key_exists("photo", $map) ? $map["photo"] : NULL;
+            $this->address = NULL;
+            $this->contacts = NULL;
+            $this->appointments = NULL;
+
+            if (array_key_exists("address", $map) && is_array($map["address"])) {
+                $this->address = (new Address())->fromMap($map["address"]);
+            } elseif (array_key_exists("address_id", $map)) {
+                $this->address = $map["address_id"];
+            }
+
+            if (array_key_exists("contacts", $map) && is_array($map["contacts"])) {
+                $this->contacts = array_map(function ($contactMap) {
+                    return (new Contact())->fromMap($contactMap);
+                }, $map["contacts"]);
+            }
+
+            if (array_key_exists("appointments", $map) && is_array($map["appointments"])) {
+                $this->appointments = array_map(function ($appointmentMap) {
+                    return (new Appointment())->fromMap($appointmentMap);
+                }, $map["appointments"]);
+            }
+        }
+        return $this;
+    }
+
+    /* end of methods to api requests */
 
     /* other methods */
 
