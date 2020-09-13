@@ -131,15 +131,13 @@ class Owner extends Person {
      * Returns an owner object with the attributes of the associative array */
     public function fromMap($map) {
         if (!is_null($map) && is_array($map)) {
-            $this->id = array_key_exists("id", $map) ? $map["id"] : NULL;
-            $this->name = array_key_exists("name", $map) ? $map["name"] : NULL;
-            $this->dateOfBirth = array_key_exists("date_of_birth", $map) ? new DateTime($map["date_of_birth"]) : NULL;
-            $this->phone = array_key_exists("phone", $map) ? $map["phone"] : NULL;
-            $this->email = array_key_exists("email", $map) ? $map["email"] : NULL;
-            $this->photo = array_key_exists("photo", $map) ? $map["photo"] : NULL;
-            $this->address = NULL;
-            $this->contacts = NULL;
-            $this->appointments = NULL;
+            $this->id = array_key_exists("id", $map) ? $map["id"] : $this->id;
+            $this->name = array_key_exists("name", $map) ? $map["name"] : $this->name;
+            $this->dateOfBirth = array_key_exists("date_of_birth", $map) ? new DateTime($map["date_of_birth"]) : $this->dateOfBirth;
+            $this->phone = array_key_exists("phone", $map) ? $map["phone"] : $this->phone;
+            $this->email = array_key_exists("email", $map) ? $map["email"] : $this->email;
+            $this->photo = array_key_exists("photo", $map) ? $map["photo"] : $this->photo;
+            $this->password = array_key_exists("password", $map) ? $map["password"] : $this->password;
 
             if (array_key_exists("address", $map) && is_array($map["address"])) {
                 $this->address = (new Address())->fromMap($map["address"]);

@@ -191,14 +191,11 @@ class Appointment extends Bean {
      * Returns an appointment object with the attributes of the associative array */
     public function fromMap($map) {
         if (!is_null($map) && is_array($map)) {
-            $this->id = array_key_exists("id", $map) ? $map["id"] : NULL;
-            $this->start = array_key_exists("start", $map) ? new DateTime($map["start"]) : NULL;
-            $this->end = array_key_exists("end", $map) ? new DateTime($map["end"]) : NULL;
-            $this->description = array_key_exists("description", $map) ? $map["description"] : NULL;
-            $this->repeat = array_key_exists("repeat", $map) ? $map["repeat"] : NULL;
-            $this->place = NULL;
-            $this->owner = NULL;
-            $this->contacts = NULL;
+            $this->id = array_key_exists("id", $map) ? $map["id"] : $this->id;
+            $this->start = array_key_exists("start", $map) ? new DateTime($map["start"]) : $this->start;
+            $this->end = array_key_exists("end", $map) ? new DateTime($map["end"]) : $this->end;
+            $this->description = array_key_exists("description", $map) ? $map["description"] : $this->description;
+            $this->repeat = array_key_exists("repeat", $map) ? $map["repeat"] : $this->repeat;
 
             if (array_key_exists("place", $map) && is_array($map["place"])) {
                 $this->place = (new Address())->fromMap($map["place"]);

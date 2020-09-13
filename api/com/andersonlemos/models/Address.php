@@ -136,15 +136,15 @@ class Address extends Bean {
      * Returns an address object with the attributes of the associative array */
     public function fromMap($map) {
         if (!is_null($map) && is_array($map)) {
-            $this->id = array_key_exists("id", $map) ? $map["id"] : NULL;
-            $this->street = array_key_exists("street", $map) ? $map["street"] : NULL;
-            $this->number = array_key_exists("number", $map) ? $map["number"] : NULL;
-            $this->complement = array_key_exists("complement", $map) ? $map["complement"] : NULL;
-            $this->neighborhood = array_key_exists("neighborhood", $map) ? $map["neighborhood"] : NULL;
-            $this->postalCode = array_key_exists("postalCode", $map) ? $map["postalCode"] : NULL;
-            $this->city = array_key_exists("city", $map) ? $map["city"] : NULL;
-            $this->state = array_key_exists("state", $map) ? $map["state"] : NULL;
-            $this->country = array_key_exists("country", $map) ? $map["country"] : NULL;
+            $this->id = array_key_exists("id", $map) ? $map["id"] : $this->id;
+            $this->street = array_key_exists("street", $map) ? $map["street"] : $this->street;
+            $this->number = array_key_exists("number", $map) ? $map["number"] : $this->number;
+            $this->complement = array_key_exists("complement", $map) ? $map["complement"] : $this->complement;
+            $this->neighborhood = array_key_exists("neighborhood", $map) ? $map["neighborhood"] : $this->neighborhood;
+            $this->postalCode = array_key_exists("postalCode", $map) ? $map["postalCode"] : $this->postalCode;
+            $this->city = array_key_exists("city", $map) ? $map["city"] : $this->city;
+            $this->state = array_key_exists("state", $map) ? $map["state"] : $this->state;
+            $this->country = array_key_exists("country", $map) ? $map["country"] : $this->country;
         }
         return $this;
     }
