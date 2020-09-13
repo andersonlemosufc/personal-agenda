@@ -107,9 +107,9 @@ class Contact extends Person {
     /* Returns the contact object in an associative array form without the intern objects (just their ids). */
     protected function toShallowMap() {
 
-        $appointmentsIds = !is_array($this->appointments) ? NULL : array_map(function ($appointment) {
+        $appointmentsIds = array_map(function ($appointment) {
             return $appointment->getId();
-        }, $this->appointments);
+        }, $this->getAppointments());
 
         return array(
             "id" => $this->id,
@@ -129,12 +129,12 @@ class Contact extends Person {
     /* Returns the contact in an associative array form */
     public function toMap() {
         $map = $this->toShallowMap();
-        $map["address"] = $this->address ? $this->address->toShallowMap() : NULL;
-        $map["owner"] = $this->owner ? $this->owner->toShallowMap() : NULL;
+        $map["address"] = $this->getAddress() ? $this->address->toShallowMap() : NULL;
+        $map["owner"] = $this->getOwner() ? $this->owner->toShallowMap() : NULL;
 
-        $map["appointments"] = !is_array($this->appointments) ? NULL : array_map(function ($appointment) {
+        $map["appointments"] = array_map(function ($appointment) {
             return $appointment->toShallowMap();
-        }, $this->appointments);
+        }, $this->getAppointments());
 
         return $map;
     }

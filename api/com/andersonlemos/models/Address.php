@@ -125,7 +125,7 @@ class Address extends Bean {
             "number" => $this->number,
             "complement" => $this->complement,
             "neighborhood" => $this->neighborhood,
-            "postalCode" => $this->postalCode,
+            "postal_code" => $this->postalCode,
             "city" => $this->city,
             "state" => $this->state,
             "country" => $this->country
@@ -141,7 +141,7 @@ class Address extends Bean {
             $this->number = array_key_exists("number", $map) ? $map["number"] : $this->number;
             $this->complement = array_key_exists("complement", $map) ? $map["complement"] : $this->complement;
             $this->neighborhood = array_key_exists("neighborhood", $map) ? $map["neighborhood"] : $this->neighborhood;
-            $this->postalCode = array_key_exists("postalCode", $map) ? $map["postalCode"] : $this->postalCode;
+            $this->postalCode = array_key_exists("postal_code", $map) ? $map["postal_code"] : $this->postalCode;
             $this->city = array_key_exists("city", $map) ? $map["city"] : $this->city;
             $this->state = array_key_exists("state", $map) ? $map["state"] : $this->state;
             $this->country = array_key_exists("country", $map) ? $map["country"] : $this->country;

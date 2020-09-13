@@ -29,7 +29,7 @@ abstract class GenericEndpoint {
 
     /* Gets the objects from an specific model. */
     public function get() {
-        if (isset($this->urlParameters[1])) {
+        if (isset($this->urlParameters[1]) && $this->urlParameters[1] != "") {
             if (Helpers::isAnIntegerValue($this->urlParameters[1])) {
                 $id = intval($this->urlParameters[1]);
                 $object = $this->service->get($id);
@@ -62,7 +62,8 @@ abstract class GenericEndpoint {
     /* Updates objects from an specific model. */
     public function put() {
         $data = json_decode(file_get_contents("php://input"), true);
-        if (isset($data["id"])) {$id = $data["id"];
+        if (isset($data["id"])) {
+            $id = $data["id"];
             $object = $this->service->get($id);
             if (is_null($object)) {
                 GenericEndpoint::sendResponse(Constants::STATUS_CODE_200_OK, true, "Object not found. No updates were made.");

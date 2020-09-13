@@ -158,9 +158,9 @@ class Appointment extends Bean {
     /* Returns the appointment object in an associative array form without the intern objects (just their ids). */
     protected function toShallowMap() {
 
-        $contactsIds = !is_array($this->contacts) ? NULL : array_map(function ($contact) {
+        $contactsIds = array_map(function ($contact) {
             return $contact->getId();
-        }, $this->contacts);
+        }, $this->getContacts());
 
         return array(
             "id" => $this->id,
@@ -177,12 +177,12 @@ class Appointment extends Bean {
     /* Returns the appointment in an associative array form */
     public function toMap() {
         $map = $this->toShallowMap();
-        $map["place"] = $this->place ? $this->place->toShallowMap() : NULL;
-        $map["owner"] = $this->owner ? $this->owner->toShallowMap() : NULL;
+        $map["place"] = $this->getPlace() ? $this->place->toShallowMap() : NULL;
+        $map["owner"] = $this->getOwner() ? $this->owner->toShallowMap() : NULL;
 
-        $map["contacts"] = !is_array($this->contacts) ? NULL : array_map(function ($contact) {
+        $map["contacts"] = array_map(function ($contact) {
             return $contact->toShallowMap();
-        }, $this->contacts);
+        }, $this->getContacts());
 
         return $map;
     }
