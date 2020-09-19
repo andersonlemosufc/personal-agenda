@@ -92,6 +92,12 @@ class OwnerMySQLiDAO extends GenericMysqliDAO implements OwnerDAO {
         return $appointmentDAO->findByOwnerId($ownerId);
     }
 
+    public function findByEmail($email) {
+        $elements = $this->findByField("email", $email, "s");
+        $owner = count($elements) == 1 ? $elements[0] : NULL;
+        return $owner;
+    }
+
     /* end of OwnerDAO specific functions */
 
 }

@@ -96,6 +96,13 @@ class OwnerService extends GenericService {
         return $this->dao->findAppointments($ownerId);
     }
 
+    /* Receives an owner email and returns tha owner that has this email.
+     * Returns null if there is no owner with this email.
+     * */
+    public function getByEmail($email) {
+        return $this->dao->findByEmail($email);
+    }
+
 }
 
 ?>

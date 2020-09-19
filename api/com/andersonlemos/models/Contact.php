@@ -3,6 +3,7 @@ namespace com\andersonlemos\models;
 
 require_once __DIR__."/../db/dao/mysqli/ContactMySQLiDAO.php";
 require_once __DIR__."/../db/dao/mysqli/OwnerMySQLiDAO.php";
+require_once __DIR__."/../db/dao/mysqli/AppointmentMySQLiDAO.php";
 require_once __DIR__."/../utils/Helpers.php";
 require_once __DIR__."/Person.php";
 
@@ -10,6 +11,7 @@ use DateTime;
 use com\andersonlemos\utils\Helpers;
 use com\andersonlemos\db\dao\mysqli\ContactMySQLiDAO;
 use com\andersonlemos\db\dao\mysqli\OwnerMySQLiDAO;
+use com\andersonlemos\db\dao\mysqli\AppointmentMySQLiDAO;
 
 class Contact extends Person {
 
@@ -107,9 +109,9 @@ class Contact extends Person {
     /* Returns the contact object in an associative array form without the intern objects (just their ids). */
     protected function toShallowMap() {
 
-        $appointmentsIds = !is_array($this->appointments) ? NULL : array_map(function ($appointment) {
+        $appointmentsIds = array_map(function ($appointment) {
             return $appointment->getId();
-        }, $this->appointments);
+        }, $this->getAppointments());
 
         return array(
             "id" => $this->id,
@@ -129,12 +131,12 @@ class Contact extends Person {
     /* Returns the contact in an associative array form */
     public function toMap() {
         $map = $this->toShallowMap();
-        $map["address"] = $this->address ? $this->address->toShallowMap() : NULL;
-        $map["owner"] = $this->owner ? $this->owner->toShallowMap() : NULL;
+        $map["address"] = $this->getAddress() ? $this->address->toShallowMap() : NULL;
+        $map["owner"] = $this->getOwner() ? $this->owner->toShallowMap() : NULL;
 
-        $map["appointments"] = !is_array($this->appointments) ? NULL : array_map(function ($appointment) {
+        $map["appointments"] = array_map(function ($appointment) {
             return $appointment->toShallowMap();
-        }, $this->appointments);
+        }, $this->getAppointments());
 
         return $map;
     }
@@ -143,17 +145,14 @@ class Contact extends Person {
      * Returns a contact object with the attributes of the associative array */
     public function fromMap($map) {
         if (!is_null($map) && is_array($map)) {
-            $this->id = array_key_exists("id", $map) ? $map["id"] : NULL;
-            $this->name = array_key_exists("name", $map) ? $map["name"] : NULL;
-            $this->dateOfBirth = array_key_exists("date_of_birth", $map) ? new DateTime($map["date_of_birth"]) : NULL;
-            $this->phone = array_key_exists("phone", $map) ? $map["phone"] : NULL;
-            $this->email = array_key_exists("email", $map) ? $map["email"] : NULL;
-            $this->photo = array_key_exists("photo", $map) ? $map["photo"] : NULL;
-            $this->comments = array_key_exists("comments", $map) ? $map["comments"] : NULL;
-            $this->favorite = array_key_exists("favorite", $map) ? $map["favorite"] : NULL;
-            $this->address = NULL;
-            $this->owner = NULL;
-            $this->appointments = NULL;
+            $this->id = array_key_exists("id", $map) ? $map["id"] : $this->id;
+            $this->name = array_key_exists("name", $map) ? $map["name"] : $this->name;
+            $this->dateOfBirth = array_key_exists("date_of_birth", $map) ? new DateTime($map["date_of_birth"]) : $this->dateOfBirth;
+            $this->phone = array_key_exists("phone", $map) ? $map["phone"] : $this->phone;
+            $this->email = array_key_exists("email", $map) ? $map["email"] : $this->email;
+            $this->photo = array_key_exists("photo", $map) ? $map["photo"] : $this->photo;
+            $this->comments = array_key_exists("comments", $map) ? $map["comments"] : $this->comments;
+            $this->favorite = array_key_exists("favorite", $map) ? $map["favorite"] : $this->favorite;
 
             if (array_key_exists("address", $map) && is_array($map["address"])) {
                 $this->address = (new Address())->fromMap($map["address"]);
@@ -171,6 +170,11 @@ class Contact extends Person {
                 $this->appointments = array_map(function ($appointmentMap) {
                     return (new Appointment())->fromMap($appointmentMap);
                 }, $map["appointments"]);
+            } elseif (array_key_exists("appointments_ids", $map) && is_array($map["appointments_ids"])) {
+                $appointmentDAO = new AppointmentMySQLiDAO();
+                $this->appointments = array_map(function ($appointmentId) use ($appointmentDAO) {
+                    return $appointmentDAO->findById($appointmentId);
+                }, $map["appointments_ids"]);
             }
         }
         return $this;

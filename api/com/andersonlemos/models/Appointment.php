@@ -4,6 +4,7 @@ namespace com\andersonlemos\models;
 require_once __DIR__."/../db/dao/mysqli/AppointmentMySQLiDAO.php";
 require_once __DIR__."/../db/dao/mysqli/OwnerMySQLiDAO.php";
 require_once __DIR__."/../db/dao/mysqli/AddressMySQLiDAO.php";
+require_once __DIR__."/../db/dao/mysqli/ContactMySQLiDAO.php";
 require_once __DIR__."/../enums/AppointmentRepeat.php";
 require_once __DIR__."/../utils/Helpers.php";
 require_once __DIR__."/Bean.php";
@@ -14,6 +15,7 @@ use com\andersonlemos\enums\AppointmentRepeat;
 use com\andersonlemos\db\dao\mysqli\AppointmentMySQLiDAO;
 use com\andersonlemos\db\dao\mysqli\OwnerMySQLiDAO;
 use com\andersonlemos\db\dao\mysqli\AddressMySQLiDAO;
+use com\andersonlemos\db\dao\mysqli\ContactMySQLiDAO;
 
 class Appointment extends Bean {
 
@@ -158,9 +160,9 @@ class Appointment extends Bean {
     /* Returns the appointment object in an associative array form without the intern objects (just their ids). */
     protected function toShallowMap() {
 
-        $contactsIds = !is_array($this->contacts) ? NULL : array_map(function ($contact) {
+        $contactsIds = array_map(function ($contact) {
             return $contact->getId();
-        }, $this->contacts);
+        }, $this->getContacts());
 
         return array(
             "id" => $this->id,
@@ -177,12 +179,12 @@ class Appointment extends Bean {
     /* Returns the appointment in an associative array form */
     public function toMap() {
         $map = $this->toShallowMap();
-        $map["place"] = $this->place ? $this->place->toShallowMap() : NULL;
-        $map["owner"] = $this->owner ? $this->owner->toShallowMap() : NULL;
+        $map["place"] = $this->getPlace() ? $this->place->toShallowMap() : NULL;
+        $map["owner"] = $this->getOwner() ? $this->owner->toShallowMap() : NULL;
 
-        $map["contacts"] = !is_array($this->contacts) ? NULL : array_map(function ($contact) {
+        $map["contacts"] = array_map(function ($contact) {
             return $contact->toShallowMap();
-        }, $this->contacts);
+        }, $this->getContacts());
 
         return $map;
     }
@@ -191,14 +193,11 @@ class Appointment extends Bean {
      * Returns an appointment object with the attributes of the associative array */
     public function fromMap($map) {
         if (!is_null($map) && is_array($map)) {
-            $this->id = array_key_exists("id", $map) ? $map["id"] : NULL;
-            $this->start = array_key_exists("start", $map) ? new DateTime($map["start"]) : NULL;
-            $this->end = array_key_exists("end", $map) ? new DateTime($map["end"]) : NULL;
-            $this->description = array_key_exists("description", $map) ? $map["description"] : NULL;
-            $this->repeat = array_key_exists("repeat", $map) ? $map["repeat"] : NULL;
-            $this->place = NULL;
-            $this->owner = NULL;
-            $this->contacts = NULL;
+            $this->id = array_key_exists("id", $map) ? $map["id"] : $this->id;
+            $this->start = array_key_exists("start", $map) ? new DateTime($map["start"]) : $this->start;
+            $this->end = array_key_exists("end", $map) ? new DateTime($map["end"]) : $this->end;
+            $this->description = array_key_exists("description", $map) ? $map["description"] : $this->description;
+            $this->repeat = array_key_exists("repeat", $map) ? $map["repeat"] : $this->repeat;
 
             if (array_key_exists("place", $map) && is_array($map["place"])) {
                 $this->place = (new Address())->fromMap($map["place"]);
@@ -216,6 +215,11 @@ class Appointment extends Bean {
                 $this->contacts = array_map(function ($contactMap) {
                     return (new Contact())->fromMap($contactMap);
                 }, $map["contacts"]);
+            } elseif (array_key_exists("contacts_ids", $map) && is_array($map["contacts_ids"])) {
+                $contactDAO = new ContactMySQLiDAO();
+                $this->contacts = array_map(function ($contactId) use ($contactDAO) {
+                    return $contactDAO->findById($contactId);
+                }, $map["contacts_ids"]);
             }
         }
         return $this;
