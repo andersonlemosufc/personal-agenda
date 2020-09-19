@@ -26,6 +26,8 @@ class OwnerEndpoint extends GenericEndpoint {
             GenericEndpoint::sendResponse(Constants::STATUS_CODE_400_BAD_REQUEST, false, "Missing email.");
         } elseif (!isset($data["password"]) || empty(trim($data["password"]))) {
             GenericEndpoint::sendResponse(Constants::STATUS_CODE_400_BAD_REQUEST, false, "Missing password.");
+        } elseif (!is_null($this->service->getByEmail($data["email"]))) {
+            GenericEndpoint::sendResponse(Constants::STATUS_CODE_400_BAD_REQUEST, false, "Email already exists.");
         } else {
             $owner = $this->createModelInstance();
             $owner->fromMap($data);
@@ -56,12 +58,17 @@ class OwnerEndpoint extends GenericEndpoint {
             if (is_null($owner)) {
                 GenericEndpoint::sendResponse(Constants::STATUS_CODE_200_OK, true, "Object not found. No updates were made.");
             } else {
-                if (isset($data["password"])) {
-                    $data["password"] = sha1($data["password"]);
+                $ownerWithPassedEmail = $this->service->getByEmail($data["email"]);
+                if (!is_null($ownerWithPassedEmail) && $ownerWithPassedEmail->getId() != $id) {
+                    GenericEndpoint::sendResponse(Constants::STATUS_CODE_400_BAD_REQUEST, false, "Email already exists.");
+                } else {
+                    if (isset($data["password"])) {
+                        $data["password"] = sha1($data["password"]);
+                    }
+                    $owner->fromMap($data);
+                    $this->service->update($owner);
+                    GenericEndpoint::sendResponse(Constants::STATUS_CODE_200_OK, true, "Updated.", array("object" => $owner->toMap()));
                 }
-                $owner->fromMap($data);
-                $this->service->update($owner);
-                GenericEndpoint::sendResponse(Constants::STATUS_CODE_200_OK, true, "Updated.", array("object" => $owner->toMap()));
             }
         }
     }
