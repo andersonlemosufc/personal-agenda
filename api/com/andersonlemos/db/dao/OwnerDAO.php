@@ -16,6 +16,11 @@ interface OwnerDAO extends GenericDAO {
      * */
     public function findAppointments($ownerId);
 
+    /* Receives an owner email and returns tha owner that has this email.
+     * Returns null if there is no owner with this email.
+     * */
+    public function findByEmail($email);
+
 }
 
 ?>
