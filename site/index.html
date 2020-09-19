@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html ng-app="personalAgenda" ng-controller="personalAgendaController">
+    <head>
+        <meta charset="utf-8" />
+        <title>Agenda Personal</title>
+        <link rel="shortcut icon" type="text/css" href="img/agenda.icon.png">
+        <link rel="stylesheet" type="text/css" href="css/styles.css">
+    </head>
+    <body>
+        <div class="view-container">
+            <div ng-include="'views/header.html'"></div>
+        </div>
+
+        <script type="text/javascript" src="libs/js/angular_1_8_0.min.js"></script>
+        <script>
+        var app = angular.module("personalAgenda", []);
+        app.controller("personalAgendaController", function($scope) {
+            
+        });
+        </script>
+    </body>
+</html>
