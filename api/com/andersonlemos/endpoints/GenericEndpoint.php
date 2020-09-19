@@ -69,7 +69,7 @@ abstract class GenericEndpoint {
                 GenericEndpoint::sendResponse(Constants::STATUS_CODE_200_OK, true, "Object not found. No updates were made.");
             } else {
                 $object->fromMap($data);
-                $this->service->add($object);
+                $this->service->update($object);
                 GenericEndpoint::sendResponse(Constants::STATUS_CODE_200_OK, true, "Updated.", array("object" => $object->toMap()));
             }
         } else {

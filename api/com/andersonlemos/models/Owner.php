@@ -2,11 +2,15 @@
 namespace com\andersonlemos\models;
 
 require_once __DIR__."/../db/dao/mysqli/OwnerMySQLiDAO.php";
+require_once __DIR__."/../db/dao/mysqli/ContactMySQLiDAO.php";
+require_once __DIR__."/../db/dao/mysqli/AppointmentMySQLiDAO.php";
 require_once __DIR__."/../utils/Helpers.php";
 require_once __DIR__."/Person.php";
 
 use Datetime;
 use com\andersonlemos\utils\Helpers;
+use com\andersonlemos\db\dao\mysqli\ContactMySQLiDAO;
+use com\andersonlemos\db\dao\mysqli\AppointmentMySQLiDAO;
 use com\andersonlemos\db\dao\mysqli\OwnerMySQLiDAO;
 
 class Owner extends Person {
@@ -149,12 +153,22 @@ class Owner extends Person {
                 $this->contacts = array_map(function ($contactMap) {
                     return (new Contact())->fromMap($contactMap);
                 }, $map["contacts"]);
+            } elseif (array_key_exists("contacts_ids", $map) && is_array($map["contacts_ids"])) {
+                $contactDAO = new ContactMySQLiDAO();
+                $this->contacts = array_map(function ($contactId) use ($contactDAO) {
+                    return $contactDAO->findById($contactId);
+                }, $map["contacts_ids"]);
             }
 
             if (array_key_exists("appointments", $map) && is_array($map["appointments"])) {
                 $this->appointments = array_map(function ($appointmentMap) {
                     return (new Appointment())->fromMap($appointmentMap);
                 }, $map["appointments"]);
+            } elseif (array_key_exists("appointments_ids", $map) && is_array($map["appointments_ids"])) {
+                $appointmentDAO = new AppointmentMySQLiDAO();
+                $this->appointments = array_map(function ($appointmentId) use ($appointmentDAO) {
+                    return $appointmentDAO->findById($appointmentId);
+                }, $map["appointments_ids"]);
             }
         }
         return $this;

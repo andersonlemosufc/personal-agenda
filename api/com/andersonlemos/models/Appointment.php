@@ -4,6 +4,7 @@ namespace com\andersonlemos\models;
 require_once __DIR__."/../db/dao/mysqli/AppointmentMySQLiDAO.php";
 require_once __DIR__."/../db/dao/mysqli/OwnerMySQLiDAO.php";
 require_once __DIR__."/../db/dao/mysqli/AddressMySQLiDAO.php";
+require_once __DIR__."/../db/dao/mysqli/ContactMySQLiDAO.php";
 require_once __DIR__."/../enums/AppointmentRepeat.php";
 require_once __DIR__."/../utils/Helpers.php";
 require_once __DIR__."/Bean.php";
@@ -14,6 +15,7 @@ use com\andersonlemos\enums\AppointmentRepeat;
 use com\andersonlemos\db\dao\mysqli\AppointmentMySQLiDAO;
 use com\andersonlemos\db\dao\mysqli\OwnerMySQLiDAO;
 use com\andersonlemos\db\dao\mysqli\AddressMySQLiDAO;
+use com\andersonlemos\db\dao\mysqli\ContactMySQLiDAO;
 
 class Appointment extends Bean {
 
@@ -213,6 +215,11 @@ class Appointment extends Bean {
                 $this->contacts = array_map(function ($contactMap) {
                     return (new Contact())->fromMap($contactMap);
                 }, $map["contacts"]);
+            } elseif (array_key_exists("contacts_ids", $map) && is_array($map["contacts_ids"])) {
+                $contactDAO = new ContactMySQLiDAO();
+                $this->contacts = array_map(function ($contactId) use ($contactDAO) {
+                    return $contactDAO->findById($contactId);
+                }, $map["contacts_ids"]);
             }
         }
         return $this;

@@ -3,6 +3,7 @@ namespace com\andersonlemos\models;
 
 require_once __DIR__."/../db/dao/mysqli/ContactMySQLiDAO.php";
 require_once __DIR__."/../db/dao/mysqli/OwnerMySQLiDAO.php";
+require_once __DIR__."/../db/dao/mysqli/AppointmentMySQLiDAO.php";
 require_once __DIR__."/../utils/Helpers.php";
 require_once __DIR__."/Person.php";
 
@@ -10,6 +11,7 @@ use DateTime;
 use com\andersonlemos\utils\Helpers;
 use com\andersonlemos\db\dao\mysqli\ContactMySQLiDAO;
 use com\andersonlemos\db\dao\mysqli\OwnerMySQLiDAO;
+use com\andersonlemos\db\dao\mysqli\AppointmentMySQLiDAO;
 
 class Contact extends Person {
 
@@ -168,6 +170,11 @@ class Contact extends Person {
                 $this->appointments = array_map(function ($appointmentMap) {
                     return (new Appointment())->fromMap($appointmentMap);
                 }, $map["appointments"]);
+            } elseif (array_key_exists("appointments_ids", $map) && is_array($map["appointments_ids"])) {
+                $appointmentDAO = new AppointmentMySQLiDAO();
+                $this->appointments = array_map(function ($appointmentId) use ($appointmentDAO) {
+                    return $appointmentDAO->findById($appointmentId);
+                }, $map["appointments_ids"]);
             }
         }
         return $this;
