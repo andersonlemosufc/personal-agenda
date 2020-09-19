@@ -19,7 +19,7 @@ CREATE TABLE owner (
     photo BLOB,
     address_id INTEGER,
     FOREIGN KEY (address_id) REFERENCES address(id) ON DELETE SET NULL ON UPDATE CASCADE,
-    password VARCHAR(50)
+    password VARCHAR(300)
 );
 
 CREATE TABLE contact (
