@@ -2,20 +2,42 @@
 
 namespace com\andersonlemos\endpoints;
 
+require_once __DIR__."/../utils/Constants.php";
+require_once __DIR__."/../utils/Helpers.php";
 require_once __DIR__."/../services/AddressService.php";
 require_once __DIR__."/../services/OwnerService.php";
-require_once __DIR__."/GenericEndpoint.php";
 require_once __DIR__."/GenericEndpoint.php";
 
 use com\andersonlemos\services\AddressService;
 use com\andersonlemos\services\OwnerService;
 use com\andersonlemos\utils\Constants;
+use com\andersonlemos\utils\Helpers;
 
 class OwnerEndpoint extends GenericEndpoint {
 
     /* constructor */
     public function __construct() {
         parent::__construct("Owner", new OwnerService());
+    }
+
+    /* Gets the objects from an specific model. */
+    public function get() {
+        if (isset($this->urlParameters[2]) && $this->urlParameters[2] != "") {
+            if ($this->urlParameters[2] != "contacts") {
+                GenericEndpoint::sendResponse(Constants::STATUS_CODE_404_NOT_FOUND, false, "Endpoint not found.");
+            } elseif ($this->urlParameters[1] == "" || !Helpers::isAnIntegerValue($this->urlParameters[1])) {
+                GenericEndpoint::sendResponse(Constants::STATUS_CODE_400_BAD_REQUEST, false, "ID parameter must be an integer.");
+            } else {
+                $id = intval($this->urlParameters[1]);
+                $contacts = $this->service->getContacts($id);
+                $data = array_map(function ($contact) {
+                    return $contact->toMap();
+                }, $contacts);
+                GenericEndpoint::sendResponse(Constants::STATUS_CODE_200_OK, true, "Done.", $data);
+            }
+        } else {
+            parent::get();
+        }
     }
 
     /* Inserts objects from the owner model. */
