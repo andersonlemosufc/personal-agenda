@@ -1,6 +1,8 @@
 :root {
     --primary-color: #2E847E;
     --secondary-color: #D3D3D3;
+    --cards-color: #F1EFF5;
+    --primary-font-color: #383838;
 }
 
 html, body{
@@ -8,9 +10,18 @@ html, body{
     padding:0;
 }
 
+.bg-primary-color {
+    background: var(--primary-color);
+}
+
+.bg-seconday-color {
+    background: var(--secondary-color);
+}
+
 .view-container {
     width: 100vw;
     height: 100vh;
+    min-height: 100vh;
     min-width: 400px;
     font-family: Arial, Helvetica, sans-serif;
     background-color: var(--secondary-color);
@@ -24,6 +35,57 @@ html, body{
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 25px; 
+    font-size: 26px;
 }
 
+.view-content {
+    width: calc(100% - 40px);
+    height: calc(100% - 70px);
+    margin: 10px 20px 0 20px;
+}
+
+.primary-button {
+    width: 260px;
+    height: 40px;
+    font-size: 16px;
+    color: white;
+    background-color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.primary-button:hover {
+    background-color: #4FADA6;
+}
+
+.primary-button.button-disabled {
+    background-color: #969696;
+    cursor: auto;
+}
+
+.primary-button.button-disabled:hover {
+    background-color: #969696;
+}
+
+#contacts-view {
+    height: 100%;
+    width: 100%;
+}
+
+.content-header {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 28px;
+    color: var(--primary-color);
+}
+
+.contacts-list {
+    width: 100%;
+    height: calc(100% - 50px);
+}

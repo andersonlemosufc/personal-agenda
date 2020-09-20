@@ -56,3 +56,5 @@ CREATE TABLE contact_appointment (
     FOREIGN KEY (contact_id) REFERENCES contact(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (appointment_id) REFERENCES appointment(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+INSERT INTO owner (name, email, password) VALUES ('admin', 'admin@test.com', sha1('123'));
