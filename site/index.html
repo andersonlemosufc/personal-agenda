@@ -11,6 +11,7 @@
             <div ng-include="'views/header.html'"></div>
             <div class="view-content">
                 <div ng-include="'views/contacts.html'" id="contacts-view" ng-controller="ContactsController"></div>
+                <div ng-show="addingOrEditingContact" ng-include="'views/save-contact-modal.html'" id="contacts-view" ng-controller="ContactsController"></div>
             </div>
         </div>
 

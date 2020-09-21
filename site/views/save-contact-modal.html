@@ -1,0 +1,58 @@
+<div id="save-employee-modal-content">
+    <div id="save-employee-modal">
+        <div class="save-employee-modal-title">{{selectedContact.id ? 'EDIT CONTACT' : 'ADD CONTACT'}}</div>
+
+        <div class="save-employee-modal-section">
+            <div class="save-employee-modal-subsection save-employee-modal-section-left">
+                <div class="save-employee-modal-label">Name:</div>
+                <input type="text" name="contact-name" id="contact-name" placeholder="Name" />
+            </div>
+            <div class="save-employee-modal-subsection save-employee-modal-section-rigth">
+                <div class="save-employee-modal-label">Phone:</div>
+                <input type="text" name="contact-phone" id="contact-phone" placeholder="Phone" />
+            </div>
+        </div>
+
+        <div class="save-employee-modal-section">
+            <div class="save-employee-modal-subsection save-employee-modal-section-left">
+                <div class="save-employee-modal-label">Email:</div>
+                <input type="text" name="contact-email" id="contact-email" placeholder="Email" />
+            </div>
+            <div class="save-employee-modal-subsection save-employee-modal-section-rigth">
+                <div class="save-employee-modal-label">Address:</div>
+                <input type="text" name="contact-address" id="contact-address" placeholder="Address" />
+            </div>
+        </div>
+
+        <div class="save-employee-modal-section">
+            <div class="save-employee-modal-subsection save-employee-modal-section-left">
+                <div class="save-employee-modal-label">Birthday:</div>
+                <input type="date" name="contact-birthday" id="contact-birthday" placeholder="Birthday" />
+            </div>
+            <div class="save-employee-modal-subsection save-employee-modal-section-rigth">
+                <div class="save-employee-modal-label">Photo:</div>
+                <input type="file" accept="image/*" name="contact-photo" id="contact-photo" placeholder="Photo" />
+            </div>
+        </div>
+
+        <div class="save-employee-modal-section">
+            <div class="save-employee-modal-long-subsection">
+                <div class="save-employee-modal-label">Comments:</div>
+                <input type="text" name="contact-comments" id="contact-comments" placeholder="Comments" />
+            </div>
+        </div>
+
+
+        <div class="save-employee-modal-buttons-content">
+            <div class="save-employee-modal-buttons">
+                <div class="save-employee-modal-button-left save-employee-modal-button-content">
+                    <div class="save-employee-modal-button secondary-button">CANCEL</div>
+                </div>
+                <div class="save-employee-modal-button-right save-employee-modal-button-content">
+                    <div class="save-employee-modal-button primary-button">ADD CONTACT</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

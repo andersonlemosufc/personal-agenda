@@ -64,6 +64,24 @@ html, body{
     background-color: #4FADA6;
 }
 
+.secondary-button {
+    width: 258px;
+    height: 38px;
+    font-size: 16px;
+    color: #444;
+    background-color: #F1EFF5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    cursor: pointer;
+    border: solid 1px #AAA;
+}
+
+.secondary-button:hover {
+    background-color: #CCC;
+}
+
 .primary-button.button-disabled {
     background-color: #969696;
     cursor: auto;
@@ -133,6 +151,13 @@ html, body{
     .contact-card {
         width: calc(25% - 20px);
         min-width: calc(25% - 20px);
+    }
+}
+
+@media (min-width: 1620px) {
+    .contact-card {
+        width: calc(20% - 20px);
+        min-width: calc(20% - 20px);
     }
 }
 
@@ -245,4 +270,116 @@ html, body{
 .contact-actions-right img {
     height: 100%;
     width: 100%;
+}
+
+#save-employee-modal-content {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+#save-employee-modal {
+    width: 50%;
+    min-width: 340px;
+    background-color: white;
+    margin: 0 auto;
+    margin-top: 100px;
+    border-radius: 8px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--primary-font-color);
+    padding: 20px 0 30px 20px;
+}
+
+.save-employee-modal-title {
+    color: var(--primary-color);
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+}
+
+.save-employee-modal-section {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.save-employee-modal-section .save-employee-modal-label {
+    margin-top: 10px;
+}
+
+.save-employee-modal-subsection {
+    line-height: 1.5;
+    min-width: 320px;
+    width: calc(50% - 20px);
+    padding-right: 20px;
+}
+
+#save-employee-modal input {
+    width: calc(100% - 12px);
+    min-width: 300px;
+    padding: 5px;
+    border: solid #AAA 1px;
+    height: 26px;
+    border-radius: 2px;
+}
+
+.save-employee-modal-long-subsection {
+    width: calc(50% - 20px);
+    padding-right: 20px;
+    min-width: 320px;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.5;
+}
+
+.save-employee-modal-buttons-content {
+    width: calc(100% - 20px);
+    padding-right: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.save-employee-modal-buttons {
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    margin-top: 30px;
+    min-width: 320px;
+}
+
+.save-employee-modal-button-content {
+    display: flex;
+    width: 50%;
+}
+
+.save-employee-modal-button-right.save-employee-modal-button-content {
+    justify-content: flex-end;
+}
+
+.save-employee-modal-button {
+    width: 48%;
+    min-width: 150px;
+    margin: 0;
+}
+
+@media (min-width: 1360px) {
+    .save-employee-modal-long-subsection {
+        width: calc(100% - 20px);
+    }
+
+    .save-employee-modal-buttons {
+        width: 100%;
+    }
+
+    .save-employee-modal-button-content {
+    }
+
 }
