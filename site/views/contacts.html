@@ -6,8 +6,8 @@
 <div ng-if="!contacts.length" class="no-contacts-message">You don't have any contacts yet. You can add new contacts by clicking the "Add Contact" button.</div>
 <div ng-if="contacts.length" class="contacts-list">
     <div class="contact-card" ng-repeat="contact in contacts | orderBy: 'name'">
-        <div class="contact-image">
-            <img ng-if="contact.photo" src="{{contact.photo}}">
+        <div class="contact-image" ng-class="{'image-content': contact.photo}">
+            <img ng-if="contact.photo" ng-class="{'portrait-image': !contact.isPhotoLandscape, 'landscape-image': contact.isPhotoLandscape}" src="{{contact.photo}}">
             <div ng-if="!contact.photo" >{{getInitials(contact)}}</div>
         </div>
         <div class="contact-content">

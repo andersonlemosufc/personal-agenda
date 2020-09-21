@@ -173,6 +173,18 @@ html, body{
     border-radius: 8px 8px 0 0;
 }
 
+.image-content {
+    background-color: #E5E3EB;
+}
+
+.portrait-image {
+    height: 100%;
+}
+
+.landscape-image {
+    width: 100%;
+}
+
 .contact-content {
     width: calc(100% - 16px);
     height: 38%;

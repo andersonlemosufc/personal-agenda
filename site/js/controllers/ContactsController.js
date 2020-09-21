@@ -13,14 +13,28 @@
                 currentOwner = LoginService.getOwner();
                 ContactsService.getContactsByOwner(1).then(function (contacts) {
                     $scope.contacts = contacts;
-
-                    $scope.contacts.forEach(function (contact) {
-                        contact.viewAddress = contact.address ? contact.address.street + ", " + contact.address.number + ", " + contact.address.neighborhood : "";
-                        contact.date_of_birth = contact.date_of_birth ? new Date(contact.date_of_birth) : "";
-                    });
-
-                    $scope.$apply();
+                    prepareContacts();
                 });
+            });
+        }
+
+        function prepareContacts() {
+
+            let promises = [];
+            $scope.contacts.forEach(function (contact) {
+                contact.viewAddress = contact.address ? contact.address.street + ", " + contact.address.number + ", " + contact.address.neighborhood : "";
+                contact.date_of_birth = contact.date_of_birth ? new Date(contact.date_of_birth) : "";
+                if (contact.photo) {
+                    let promise = getContactPhotoDimensions(contact.photo).then(function (dimensions) {
+                        if (dimensions.height < dimensions.width) {
+                            contact.isPhotoLandscape = true;
+                        }
+                    });
+                }
+            });
+
+            Promise.all(promises).then(function () {
+                $scope.$apply();
             });
         }
 
@@ -57,6 +71,22 @@
             console.log(initials);
             return initials;
         };
+
+        function getContactPhotoDimensions(photo) {
+            return new Promise (function (resolve, reject) {
+                let image = new Image();
+
+                image.onload = function () {
+                    let dimensions = {
+                        width: image.width,
+                        height: image.height
+                    };
+                    resolve(dimensions);
+                };
+
+                image.src = photo;
+            });
+        }
 
         _onInit();
 

@@ -16,7 +16,7 @@ CREATE TABLE owner (
     date_of_birth DATETIME,
     phone VARCHAR(15),
     email VARCHAR(100),
-    photo BLOB,
+    photo LONGBLOB,
     address_id INTEGER,
     FOREIGN KEY (address_id) REFERENCES address(id) ON DELETE SET NULL ON UPDATE CASCADE,
     password VARCHAR(300)
@@ -28,7 +28,7 @@ CREATE TABLE contact (
     date_of_birth DATETIME,
     phone VARCHAR(15),
     email VARCHAR(100),
-    photo BLOB,
+    photo LONGBLOB,
     address_id INTEGER,
     FOREIGN KEY (address_id) REFERENCES address(id) ON DELETE SET NULL ON UPDATE CASCADE,
     comments VARCHAR(300),
