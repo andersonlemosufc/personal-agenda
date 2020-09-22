@@ -1,6 +1,6 @@
 (function () {
 
-    app.controller("ContactsController", function ($scope, ContactsService, LoginService) {
+    app.controller("ContactsController", function ($scope, ContactsService, LoginService, $timeout) {
 
         let currentOwner = null;
 
@@ -11,39 +11,86 @@
             // TODO: remove this function and really code the login part (I am just using a default owner in the moment)
             LoginService.loginWithDefaultOwner().then(function () {
                 currentOwner = LoginService.getOwner();
-                ContactsService.getContactsByOwner(1).then(function (contacts) {
+                ContactsService.getContactsByOwner(currentOwner.id).then(function (contacts) {
                     $scope.contacts = contacts;
                     prepareContacts();
+                    $scope.$apply();
                 });
             });
         }
 
         function prepareContacts() {
 
-            let promises = [];
             $scope.contacts.forEach(function (contact) {
-                contact.viewAddress = contact.address ? contact.address.street + ", " + contact.address.number + ", " + contact.address.neighborhood : "";
-                contact.date_of_birth = contact.date_of_birth ? new Date(contact.date_of_birth) : "";
+                contact.addressView = getFormatedAddress(contact.address);
+                contact.dateOfBirth = contact.date_of_birth ? new Date(contact.date_of_birth) : "";
                 if (contact.photo) {
-                    let promise = getContactPhotoDimensions(contact.photo).then(function (dimensions) {
-                        if (dimensions.height < dimensions.width) {
-                            contact.isPhotoLandscape = true;
-                        }
-                    });
+                    fixContactPhotoDimensions(contact);
                 }
-            });
-
-            Promise.all(promises).then(function () {
-                $scope.$apply();
             });
         }
 
-        $scope.openAddContactModal = function () {
+        $scope.openAddContactModal = function (contact) {
+            $scope.selectedContact = contact || { owner_id: currentOwner.id };
+            $scope.addingOrEditingContact = true;
+        };
 
+        $scope.closeAddContactModal = function () {
+            $scope.addingOrEditingContact = false;
+            $scope.selectedContact = null;
+            $scope.contactBeingEdited = null;
+        }
+
+        $scope.saveContact = function (contact) {
+            if (!contact.name) {
+                alert("The field Name is required. Please fill it out.");
+            } else {
+                $scope.savingContact = true;
+                const adding = !Boolean(contact.id);
+                if (contact.uploadPhotoPromise) {
+                    contact.uploadPhotoPromise.finally(function () {
+                        delete contact.uploadPhotoPromise;
+                        $scope.saveContact(contact)
+                    });
+                } else {
+                    let message;
+                    ContactsService.saveContact(contact).then(function (contactObject) {
+                        contactObject.addressView = getFormatedAddress(contactObject.address);
+                        contactObject.dateOfBirth = contactObject.date_of_birth ? new Date(contactObject.date_of_birth) : "";
+
+                        if (adding) {
+                            $scope.contacts.push(contactObject);
+                            $scope.selectedContact = { owner_id: currentOwner.id };
+                            if (contactObject.photo) {
+                                fixContactPhotoDimensions(contactObject);
+                            }
+                        } else {
+                            Object.assign($scope.contactBeingEdited, contact);
+                            if ($scope.contactBeingEdited.photo) {
+                                fixContactPhotoDimensions($scope.contactBeingEdited);
+                            }
+                        }
+
+                        message = adding ? "Contact added!" : "Contact saved!";
+                        $scope.closeAddContactModal();
+                    }).catch(function (error) {
+                        console.error(error);
+                        message = "Error saving contact: " + error;
+                    }).finally(function () {
+                        $scope.savingContact = false;
+                        $scope.$apply();
+                        $timeout(function() {
+                            alert(message);
+                        }, 10);
+                    });
+                }
+            }
         };
 
         $scope.editContact = function (contact) {
             if (!contact.deletingContact) {
+                $scope.contactBeingEdited = contact;
+                $scope.openAddContactModal(angular.copy(contact));
             }
         };
 
@@ -54,8 +101,16 @@
             contact.favorite = !contact.favorite;
         };
 
+        $scope.uploadContactPhoto = function (file) {
+            $scope.selectedContact.uploadPhotoPromise = toBase64(file).then(function (data) {
+                $scope.selectedContact.photo = data;
+            }).catch(function (error) {
+                $scope.selectedContact.photo = null;
+                console.error(error);
+            });
+        };
+
         $scope.getInitials = function (contact) {
-            console.log("getInitials");
             let initials = "";
             if (contact.name && contact.name.length) {
                 let splitedName = contact.name.split(" ");
@@ -68,9 +123,19 @@
                     }
                 }
             }
-            console.log(initials);
             return initials;
         };
+
+        function fixContactPhotoDimensions(contact) {
+            getContactPhotoDimensions(contact.photo).then(function (dimensions) {
+                if (dimensions.height < dimensions.width) {
+                    contact.isPhotoLandscape = true;
+                } else {
+                    contact.isPhotoLandscape = false;
+                }
+                $scope.$apply();
+            });
+        }
 
         function getContactPhotoDimensions(photo) {
             return new Promise (function (resolve, reject) {
@@ -86,6 +151,41 @@
 
                 image.src = photo;
             });
+        }
+
+        function toBase64(file) {
+            return new Promise(function (resolve, reject) {
+                if (file) {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+
+                    reader.onload = function () {
+                        resolve(reader.result);
+                    }
+
+                    reader.onerror = function (error) {
+                        reject(error);
+                    }
+                } else {
+                    resolve(null);
+                }
+            });
+        }
+
+        function getFormatedAddress(addressObject) {
+            let formatedAddress = "";
+            if (addressObject) {
+                formatedAddress = addressObject.street;
+
+                if (addressObject.number) {
+                    formatedAddress += ", " + addressObject.number;
+                }
+
+                if (addressObject.neighborhood) {
+                    formatedAddress += ", " + addressObject.neighborhood;
+                }
+            }
+            return formatedAddress;
         }
 
         _onInit();

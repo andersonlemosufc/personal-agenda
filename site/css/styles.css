@@ -58,6 +58,7 @@ html, body{
     justify-content: center;
     border-radius: 4px;
     cursor: pointer;
+    border: none;
 }
 
 .primary-button:hover {
@@ -81,6 +82,9 @@ html, body{
 .secondary-button:hover {
     background-color: #CCC;
 }
+.secondary-button:focus, .primary-button:focus {
+    outline: 0;
+}
 
 .primary-button.button-disabled {
     background-color: #969696;
@@ -89,6 +93,15 @@ html, body{
 
 .primary-button.button-disabled:hover {
     background-color: #969696;
+}
+
+.secondary-button.button-disabled {
+    background-color: #AAA;
+    cursor: auto;
+}
+
+.secondary-button.button-disabled:hover {
+    background-color: #AAA;
 }
 
 #contacts-view {
@@ -380,6 +393,19 @@ html, body{
     width: 48%;
     min-width: 150px;
     margin: 0;
+}
+
+.saving-contact-loading-image {
+    width: 48%;
+    min-width: 150px;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.saving-contact-loading-image img {
+    height: 34px;
 }
 
 @media (min-width: 1360px) {

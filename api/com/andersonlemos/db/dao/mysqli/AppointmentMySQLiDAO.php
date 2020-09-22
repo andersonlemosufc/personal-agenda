@@ -12,7 +12,6 @@ use com\andersonlemos\db\dao\AppointmentDAO;
 use com\andersonlemos\enums\GenericDAOOperations;
 use com\andersonlemos\models\Appointment;
 use com\andersonlemos\utils\Helpers;
-use DateTime;
 
 class AppointmentMySQLiDAO extends GenericMysqliDAO implements AppointmentDAO {
 
@@ -138,7 +137,7 @@ class AppointmentMySQLiDAO extends GenericMysqliDAO implements AppointmentDAO {
         $stmt->bind_result($id, $start, $end, $description, $repeat, $placeId, $ownerId);
 
         if ($stmt->fetch()) {
-            $appointment = new Appointment($id, new DateTime($start), new DateTime($end), $description, $repeat, $placeId, $ownerId, NULL);
+            $appointment = new Appointment($id, Helpers::stringToDateTime($start), Helpers::stringToDateTime($end), $description, $repeat, $placeId, $ownerId, NULL);
         }
 
         return $appointment;

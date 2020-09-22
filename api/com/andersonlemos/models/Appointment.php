@@ -9,7 +9,6 @@ require_once __DIR__."/../enums/AppointmentRepeat.php";
 require_once __DIR__."/../utils/Helpers.php";
 require_once __DIR__."/Bean.php";
 
-use DateTime;
 use com\andersonlemos\utils\Helpers;
 use com\andersonlemos\enums\AppointmentRepeat;
 use com\andersonlemos\db\dao\mysqli\AppointmentMySQLiDAO;
@@ -194,8 +193,8 @@ class Appointment extends Bean {
     public function fromMap($map) {
         if (!is_null($map) && is_array($map)) {
             $this->id = array_key_exists("id", $map) ? $map["id"] : $this->id;
-            $this->start = array_key_exists("start", $map) ? new DateTime($map["start"]) : $this->start;
-            $this->end = array_key_exists("end", $map) ? new DateTime($map["end"]) : $this->end;
+            $this->start = array_key_exists("start", $map) ? Helpers::stringToDateTime($map["start"]) : $this->start;
+            $this->end = array_key_exists("end", $map) ? Helpers::stringToDateTime($map["end"]) : $this->end;
             $this->description = array_key_exists("description", $map) ? $map["description"] : $this->description;
             $this->repeat = array_key_exists("repeat", $map) ? $map["repeat"] : $this->repeat;
 

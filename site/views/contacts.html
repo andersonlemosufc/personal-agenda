@@ -1,13 +1,13 @@
 <div class="content-header">
     <div>CONTACT LIST</div>
-    <div class="primary-button" ng-click="openAddContactModal()">ADD CONTACT</div>
+    <button type="button" class="primary-button" ng-click="openAddContactModal()">ADD CONTACT</button>
 </div>
 
 <div ng-if="!contacts.length" class="no-contacts-message">You don't have any contacts yet. You can add new contacts by clicking the "Add Contact" button.</div>
 <div ng-if="contacts.length" class="contacts-list">
     <div class="contact-card" ng-repeat="contact in contacts | orderBy: 'name'">
         <div class="contact-image" ng-class="{'image-content': contact.photo}">
-            <img ng-if="contact.photo" ng-class="{'portrait-image': !contact.isPhotoLandscape, 'landscape-image': contact.isPhotoLandscape}" src="{{contact.photo}}">
+            <img ng-if="contact.photo" ng-class="{'portrait-image': !contact.isPhotoLandscape, 'landscape-image': contact.isPhotoLandscape}" src="{{contact.photo}}" />
             <div ng-if="!contact.photo" >{{getInitials(contact)}}</div>
         </div>
         <div class="contact-content">
@@ -21,10 +21,10 @@
                     Comments: <br>
                 </div>
                 <div class="contact-info-data">
-                    {{contact.name}} <br>
+                    {{contact.phone}} <br>
                     {{contact.email}} <br>
-                    {{contact.viewAddress}} <br>
-                    {{contact.date_of_birth | date: 'MMM dd'}} <br>
+                    {{contact.addressView}} <br>
+                    {{contact.dateOfBirth!='' ? (contact.dateOfBirth | date: 'MMM dd') : ''}} <br>
                     {{contact.comments}} <br>
                 </div>
             </div>
