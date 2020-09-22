@@ -30,20 +30,25 @@
             </div>
         </div>
         <div class="contact-actions">
-            <div class="contact-actions-left">
-                <div class="img-contact-action" ng-class="{'button-spinning': contact.deletingContact}" ng-click="editContact(contact)">
-                    <img src="img/edit.png">
-                </div>
+            <div ng-if="!contact.deleted" class="contact-actions-content">
+                <div class="contact-actions-left">
+                    <div class="img-contact-action" ng-class="{'button-spinning': contact.deleting}" ng-click="editContact(contact)">
+                        <img src="img/edit.png">
+                    </div>
 
-                <div ng-if="!contact.deletingContact" class="img-contact-action" ng-click="deleteContact(contact)">
-                    <img src="img/delete.png">
+                    <div ng-if="!contact.deleting" class="img-contact-action" ng-click="deleteContact(contact)">
+                        <img src="img/delete.png">
+                    </div>
+                    <div ng-if="contact.deleting" class="img-contact-action button-spinning"><img src="img/spin.svg"></div>
                 </div>
-                <div ng-if="contact.deletingContact" class="img-contact-action button-spinning"><img src="img/spin.svg"></div>
+                <div class="contact-actions-right">
+                    <span>Favorite</span>
+                    <div ng-if="contact.favorite" class="img-contact-favorite" ng-click="favoriteContact(contact)"><img src="img/favorite.png"></div>
+                    <div ng-if="!contact.favorite" class="img-contact-favorite" ng-click="favoriteContact(contact)"><img src="img/favorite-not.png"></div>
+                </div>
             </div>
-            <div class="contact-actions-right">
-                <span>Favorite</span>
-                <div ng-if="contact.favorite" class="img-contact-favorite" ng-click="favoriteContact(contact)"><img src="img/favorite.png"></div>
-                <div ng-if="!contact.favorite" class="img-contact-favorite" ng-click="favoriteContact(contact)"><img src="img/favorite-not.png"></div>
+            <div ng-if="contact.deleted" class="contact-deleted-info">
+                Deleted!
             </div>
         </div>
     </div>

@@ -239,6 +239,21 @@ html, body{
     border-radius: 0 0 8px 8px;
 }
 
+.contact-actions-content {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.contact-deleted-info {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    color: #F53333;
+    font-weight: bold;
+}
+
 .contact-actions-left {
     flex: 3;
     display: flex;

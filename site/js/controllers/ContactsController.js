@@ -88,13 +88,26 @@
         };
 
         $scope.editContact = function (contact) {
-            if (!contact.deletingContact) {
+            if (!contact.deleting) {
                 $scope.contactBeingEdited = contact;
                 $scope.openAddContactModal(angular.copy(contact));
             }
         };
 
         $scope.deleteContact = function (contact) {
+            contact.deleting = true;
+            ContactsService.deleteContact(contact).then(function (response) {
+                contact.deleted = true;
+                $timeout(function () {
+                    removeContact(contact.id);
+                    $scope.$apply();
+                }, 3000);
+            }).catch(function (error) {
+                alert("Error deleting contact: " + error);
+            }).finally(function () {
+                contact.deleting = false;
+                $scope.$apply();
+            });
         };
 
         $scope.favoriteContact = function (contact) {
@@ -125,6 +138,16 @@
             }
             return initials;
         };
+
+        function removeContact(contactId) {
+            let index = $scope.contacts.findIndex(function (contact) {
+                return contact.id === contactId;
+            });
+
+            if (index >= 0) {
+                $scope.contacts.splice(index, 1);
+            }
+        }
 
         function fixContactPhotoDimensions(contact) {
             getContactPhotoDimensions(contact.photo).then(function (dimensions) {
