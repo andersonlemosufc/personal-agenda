@@ -7,7 +7,6 @@ require_once __DIR__."/../db/dao/mysqli/AppointmentMySQLiDAO.php";
 require_once __DIR__."/../utils/Helpers.php";
 require_once __DIR__."/Person.php";
 
-use DateTime;
 use com\andersonlemos\utils\Helpers;
 use com\andersonlemos\db\dao\mysqli\ContactMySQLiDAO;
 use com\andersonlemos\db\dao\mysqli\OwnerMySQLiDAO;
@@ -147,7 +146,7 @@ class Contact extends Person {
         if (!is_null($map) && is_array($map)) {
             $this->id = array_key_exists("id", $map) ? $map["id"] : $this->id;
             $this->name = array_key_exists("name", $map) ? $map["name"] : $this->name;
-            $this->dateOfBirth = array_key_exists("date_of_birth", $map) ? new DateTime($map["date_of_birth"]) : $this->dateOfBirth;
+            $this->dateOfBirth = array_key_exists("date_of_birth", $map) ? Helpers::stringToDateTime($map["date_of_birth"]) : $this->dateOfBirth;
             $this->phone = array_key_exists("phone", $map) ? $map["phone"] : $this->phone;
             $this->email = array_key_exists("email", $map) ? $map["email"] : $this->email;
             $this->photo = array_key_exists("photo", $map) ? $map["photo"] : $this->photo;

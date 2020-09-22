@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html ng-app="personalAgenda">
+    <head>
+        <meta charset="utf-8" />
+        <title>Personal Agenda</title>
+        <link rel="shortcut icon" type="text/css" href="img/agenda.icon.png">
+        <link rel="stylesheet" type="text/css" href="css/styles.css">
+    </head>
+    <body>
+        <div class="view-container">
+            <div ng-include="'views/header.html'"></div>
+            <div class="view-content" ng-controller="ContactsController">
+                <div ng-include="'views/contacts.html'" id="contacts-view"></div>
+                <div ng-show="addingOrEditingContact" ng-include="'views/save-contact-modal.html'" id="contacts-view"></div>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="libs/js/angular/angular_1_8_0.js"></script>
+        <script type="text/javascript" src="js/global.js"></script>
+        <script type="text/javascript" src="js/services/LoginService.js"></script>
+        <script type="text/javascript" src="js/services/ContactsService.js"></script>
+        <script type="text/javascript" src="js/controllers/ContactsController.js"></script>
+    </body>
+</html>

@@ -13,7 +13,6 @@ use com\andersonlemos\db\dao\OwnerDAO;
 use com\andersonlemos\enums\GenericDAOOperations;
 use com\andersonlemos\models\Owner;
 use com\andersonlemos\utils\Helpers;
-use DateTime;
 
 class OwnerMySQLiDAO extends GenericMysqliDAO implements OwnerDAO {
 
@@ -74,7 +73,7 @@ class OwnerMySQLiDAO extends GenericMysqliDAO implements OwnerDAO {
         $stmt->bind_result($id, $name, $dateOfBirth, $phone, $email, $photo, $addressId, $password);
 
         if ($stmt->fetch()) {
-            $owner = new Owner($id, $name, new DateTime($dateOfBirth), $phone, $email, $photo, $addressId, $password, NULL, NULL);
+            $owner = new Owner($id, $name, Helpers::stringToDateTime($dateOfBirth), $phone, $email, $photo, $addressId, $password, NULL, NULL);
         }
 
         return $owner;

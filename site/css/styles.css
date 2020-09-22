@@ -1,0 +1,438 @@
+:root {
+    --primary-color: #2E847E;
+    --secondary-color: #D3D3D3;
+    --cards-color: #F1EFF5;
+    --primary-font-color: #383838;
+}
+
+html, body{
+    margin: 0;
+    padding: 0;
+    background-color: var(--secondary-color);
+}
+
+.bg-primary-color {
+    background: var(--primary-color);
+}
+
+.bg-seconday-color {
+    background: var(--secondary-color);
+}
+
+.view-container {
+    width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    min-width: 400px;
+    overflow-y: auto;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: var(--secondary-color);
+    color: var(--primary-font-color);
+}
+
+.header {
+    width: 100%;
+    height: 60px;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    box-shadow: 0px 0px 12px 0px black;
+}
+
+.view-content {
+    width: calc(100% - 40px);
+    margin: 10px 18px 0 20px;
+}
+
+.primary-button {
+    width: 260px;
+    height: 40px;
+    font-size: 16px;
+    color: white;
+    background-color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+}
+
+.primary-button:hover {
+    background-color: #4FADA6;
+}
+
+.secondary-button {
+    width: 258px;
+    height: 38px;
+    font-size: 16px;
+    color: #444;
+    background-color: #F1EFF5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    cursor: pointer;
+    border: solid 1px #AAA;
+}
+
+.secondary-button:hover {
+    background-color: #CCC;
+}
+.secondary-button:focus, .primary-button:focus {
+    outline: 0;
+}
+
+.primary-button.button-disabled {
+    background-color: #969696;
+    cursor: auto;
+}
+
+.primary-button.button-disabled:hover {
+    background-color: #969696;
+}
+
+.secondary-button.button-disabled {
+    background-color: #AAA;
+    cursor: auto;
+}
+
+.secondary-button.button-disabled:hover {
+    background-color: #AAA;
+}
+
+#contacts-view {
+    height: 100%;
+    width: 100%;
+}
+
+.content-header {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 28px;
+    color: var(--primary-color);
+    margin-right: 2px;
+}
+
+.no-contacts-message {
+    margin-top: 30px;
+}
+
+.contacts-list {
+    width: calc(100% + 20px);
+    overflow-y: auto;
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.contact-card {
+    height: 400px;
+    width: calc(100% - 20px);
+    min-height: 400px;
+    min-width: calc(100% - 20px);
+    background-color: yellow;
+    float: left;
+    margin-right: 20px;
+    margin-top: 2%;
+    border-radius: 8px;
+}
+
+@media (min-width: 660px) {
+    .contact-card {
+        width: calc(50% - 20px);
+        min-width: calc(50% - 20px);
+    }
+}
+
+@media (min-width: 980px) {
+    .contact-card {
+        width: calc(33.33% - 20px);
+        min-width: calc(33.33% - 20px);
+    }
+}
+
+@media (min-width: 1300px) {
+    .contact-card {
+        width: calc(25% - 20px);
+        min-width: calc(25% - 20px);
+    }
+}
+
+@media (min-width: 1620px) {
+    .contact-card {
+        width: calc(20% - 20px);
+        min-width: calc(20% - 20px);
+    }
+}
+
+.contact-image {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #90B5E0;
+    font-size: 50px;
+    color: white;
+    border-radius: 8px 8px 0 0;
+}
+
+.image-content {
+    background-color: #E5E3EB;
+}
+
+.portrait-image {
+    height: 100%;
+}
+
+.landscape-image {
+    width: 100%;
+}
+
+.contact-content {
+    width: calc(100% - 16px);
+    height: 38%;
+    padding-left: 16px;
+    display: flex;
+    flex-direction: column;
+    background-color: #F1EFF5;
+}
+
+.contact-name {
+    color: var(--primary-color);
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+.contact-info {
+    font-size: 14px;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: row;
+    font-weight: bold;
+}
+
+.contact-info-data {
+    margin-left: 10px;
+    font-weight: normal;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.contact-actions {
+    height: 12%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #E5E3EB;
+    border-radius: 0 0 8px 8px;
+}
+
+.contact-actions-content {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.contact-deleted-info {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    color: #F53333;
+    font-weight: bold;
+}
+
+.contact-actions-left {
+    flex: 3;
+    display: flex;
+    flex-direction: row;
+    margin-left: 14px;
+}
+
+.contact-actions-right {
+    flex: 7;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 20px;
+}
+
+.contact-actions-left img {
+    height: 20px;
+    width: 20px;
+}
+
+.img-contact-action {
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.img-contact-action:hover {
+    background-color: var(--secondary-color);
+}
+
+.img-contact-action.button-spinning {
+    background-color: #E5E3EB;
+    cursor: auto;
+}
+
+.img-contact-action.button-spinning:hover{
+    background-color: #E5E3EB;
+}
+
+.img-contact-favorite {
+    margin-left: 6px;
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+}
+
+.contact-actions-right img {
+    height: 100%;
+    width: 100%;
+}
+
+#save-employee-modal-content {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+#save-employee-modal {
+    width: 50%;
+    min-width: 340px;
+    background-color: white;
+    margin: 0 auto;
+    margin-top: 100px;
+    border-radius: 8px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--primary-font-color);
+    padding: 20px 0 30px 20px;
+}
+
+.save-employee-modal-title {
+    color: var(--primary-color);
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+}
+
+.save-employee-modal-section {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.save-employee-modal-section .save-employee-modal-label {
+    margin-top: 10px;
+}
+
+.save-employee-modal-subsection {
+    line-height: 1.5;
+    min-width: 320px;
+    width: calc(50% - 20px);
+    padding-right: 20px;
+}
+
+#save-employee-modal input {
+    width: calc(100% - 12px);
+    min-width: 300px;
+    padding: 5px;
+    border: solid #AAA 1px;
+    height: 26px;
+    border-radius: 2px;
+}
+
+.save-employee-modal-long-subsection {
+    width: calc(50% - 20px);
+    padding-right: 20px;
+    min-width: 320px;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.5;
+}
+
+.save-employee-modal-buttons-content {
+    width: calc(100% - 20px);
+    padding-right: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.save-employee-modal-buttons {
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    margin-top: 30px;
+    min-width: 320px;
+}
+
+.save-employee-modal-button-content {
+    display: flex;
+    width: 50%;
+}
+
+.save-employee-modal-button-right.save-employee-modal-button-content {
+    justify-content: flex-end;
+}
+
+.save-employee-modal-button {
+    width: 48%;
+    min-width: 150px;
+    margin: 0;
+}
+
+.saving-contact-loading-image {
+    width: 48%;
+    min-width: 150px;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.saving-contact-loading-image img {
+    height: 34px;
+}
+
+@media (min-width: 1360px) {
+    .save-employee-modal-long-subsection {
+        width: calc(100% - 20px);
+    }
+
+    .save-employee-modal-buttons {
+        width: 100%;
+    }
+
+    .save-employee-modal-button-content {
+    }
+
+}

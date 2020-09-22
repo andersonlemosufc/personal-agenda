@@ -1,0 +1,59 @@
+<div id="save-employee-modal-content">
+    <form id="save-employee-modal" ng-submit="saveContact(selectedContact)">
+        <div class="save-employee-modal-title">{{selectedContact.id ? 'EDIT CONTACT' : 'ADD CONTACT'}}</div>
+
+        <div class="save-employee-modal-section">
+            <div class="save-employee-modal-subsection save-employee-modal-section-left">
+                <div class="save-employee-modal-label">Name: *</div>
+                <input type="text" name="contact-name" id="contact-name" placeholder="Name" ng-model="selectedContact.name" />
+            </div>
+            <div class="save-employee-modal-subsection save-employee-modal-section-rigth">
+                <div class="save-employee-modal-label">Phone:</div>
+                <input type="text" name="contact-phone" id="contact-phone" placeholder="Phone" ng-model="selectedContact.phone" />
+            </div>
+        </div>
+
+        <div class="save-employee-modal-section">
+            <div class="save-employee-modal-subsection save-employee-modal-section-left">
+                <div class="save-employee-modal-label">Email:</div>
+                <input type="text" name="contact-email" id="contact-email" placeholder="Email" ng-model="selectedContact.email" />
+            </div>
+            <div class="save-employee-modal-subsection save-employee-modal-section-rigth">
+                <div class="save-employee-modal-label">Address:</div>
+                <input type="text" name="contact-address" id="contact-address" placeholder="Address" ng-model="selectedContact.addressView" />
+            </div>
+        </div>
+
+        <div class="save-employee-modal-section">
+            <div class="save-employee-modal-subsection save-employee-modal-section-left">
+                <div class="save-employee-modal-label">Birthday:</div>
+                <input type="date" name="contact-birthday" id="contact-birthday" placeholder="Birthday" ng-model="selectedContact.dateOfBirth" />
+            </div>
+            <div class="save-employee-modal-subsection save-employee-modal-section-rigth">
+                <div class="save-employee-modal-label">Photo:</div>
+                <input type="file" accept="image/*" name="contact-photo" id="contact-photo" placeholder="Photo" onchange="angular.element(this).scope().uploadContactPhoto(this.files[0])"/>
+            </div>
+        </div>
+
+        <div class="save-employee-modal-section">
+            <div class="save-employee-modal-long-subsection">
+                <div class="save-employee-modal-label">Comments:</div>
+                <input type="text" name="contact-comments" id="contact-comments" placeholder="Comments" ng-model="selectedContact.comments" />
+            </div>
+        </div>
+
+
+        <div class="save-employee-modal-buttons-content">
+            <div class="save-employee-modal-buttons">
+                <div class="save-employee-modal-button-left save-employee-modal-button-content">
+                    <button ng-disabled="savingContact" type="button" ng-click="closeAddContactModal()" class="save-employee-modal-button secondary-button" ng-class="{ 'button-disabled' : savingContact }">CANCEL</button>
+                </div>
+                <div class="save-employee-modal-button-right save-employee-modal-button-content">
+                    <div ng-if="savingContact" class="saving-contact-loading-image"><img src="img/spin.svg" /></div>
+                    <button ng-if="!savingContact" type="submit" class="save-employee-modal-button primary-button">{{ selectedContact.id ? 'SAVE CONTACT' : 'ADD CONTACT' }}</button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>

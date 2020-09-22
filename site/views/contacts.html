@@ -1,0 +1,55 @@
+<div class="content-header">
+    <div>CONTACT LIST</div>
+    <button type="button" class="primary-button" ng-click="openAddContactModal()">ADD CONTACT</button>
+</div>
+
+<div ng-if="!contacts.length" class="no-contacts-message">You don't have any contacts yet. You can add new contacts by clicking the "Add Contact" button.</div>
+<div ng-if="contacts.length" class="contacts-list">
+    <div class="contact-card" ng-repeat="contact in contacts | orderBy: 'name'">
+        <div class="contact-image" ng-class="{'image-content': contact.photo}">
+            <img ng-if="contact.photo" ng-class="{'portrait-image': !contact.isPhotoLandscape, 'landscape-image': contact.isPhotoLandscape}" src="{{contact.photo}}" />
+            <div ng-if="!contact.photo" >{{getInitials(contact)}}</div>
+        </div>
+        <div class="contact-content">
+            <div class="contact-name">{{contact.name}}</div>
+            <div class="contact-info">
+                <div>
+                    Phone: <br>
+                    Email: <br>
+                    Address: <br>
+                    Birthday: <br>
+                    Comments: <br>
+                </div>
+                <div class="contact-info-data">
+                    {{contact.phone}} <br>
+                    {{contact.email}} <br>
+                    {{contact.addressView}} <br>
+                    {{contact.dateOfBirth!='' ? (contact.dateOfBirth | date: 'MMM dd') : ''}} <br>
+                    {{contact.comments}} <br>
+                </div>
+            </div>
+        </div>
+        <div class="contact-actions">
+            <div ng-if="!contact.deleted" class="contact-actions-content">
+                <div class="contact-actions-left">
+                    <div class="img-contact-action" ng-class="{'button-spinning': contact.deleting}" ng-click="editContact(contact)">
+                        <img src="img/edit.png">
+                    </div>
+
+                    <div ng-if="!contact.deleting" class="img-contact-action" ng-click="deleteContact(contact)">
+                        <img src="img/delete.png">
+                    </div>
+                    <div ng-if="contact.deleting" class="img-contact-action button-spinning"><img src="img/spin.svg"></div>
+                </div>
+                <div class="contact-actions-right">
+                    <span>Favorite</span>
+                    <div ng-if="contact.favorite" class="img-contact-favorite" ng-click="favoriteContact(contact)"><img src="img/favorite.png"></div>
+                    <div ng-if="!contact.favorite" class="img-contact-favorite" ng-click="favoriteContact(contact)"><img src="img/favorite-not.png"></div>
+                </div>
+            </div>
+            <div ng-if="contact.deleted" class="contact-deleted-info">
+                Deleted!
+            </div>
+        </div>
+    </div>
+</div>

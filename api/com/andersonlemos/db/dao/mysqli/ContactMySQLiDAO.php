@@ -12,7 +12,6 @@ use com\andersonlemos\db\dao\ContactDAO;
 use com\andersonlemos\enums\GenericDAOOperations;
 use com\andersonlemos\models\Contact;
 use com\andersonlemos\utils\Helpers;
-use DateTime;
 
 class ContactMySQLiDAO extends GenericMysqliDAO implements ContactDAO {
 
@@ -77,7 +76,7 @@ class ContactMySQLiDAO extends GenericMysqliDAO implements ContactDAO {
         $stmt->bind_result($id, $name, $dateOfBirth, $phone, $email, $photo, $addressId, $comments, $favorite, $ownerId);
 
         if ($stmt->fetch()) {
-            $contact = new Contact($id, $name, new DateTime($dateOfBirth), $phone, $email, $photo, $addressId, $comments, $favorite, $ownerId, NULL);
+            $contact = new Contact($id, $name, Helpers::stringToDateTime($dateOfBirth), $phone, $email, $photo, $addressId, $comments, $favorite, $ownerId, NULL);
         }
 
         return $contact;
