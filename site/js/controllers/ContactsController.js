@@ -112,6 +112,7 @@
 
         $scope.favoriteContact = function (contact) {
             contact.favorite = !contact.favorite;
+            ContactsService.updateFavoriteContact(contact);
         };
 
         $scope.uploadContactPhoto = function (file) {
